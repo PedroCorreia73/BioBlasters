@@ -9,7 +9,7 @@ WIDTH, HEIGHT = 1200, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Nome do Jogo")
 
-FPS = 100
+
 
 PLAYER_WIDTH = 40
 PLAYER_HEIGHT = 40
