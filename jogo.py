@@ -11,7 +11,7 @@ pygame.display.set_caption("Nome do Jogo")
 
 FPS = 100
 
-PLAYER_WIDTH = 40
+
 PLAYER_HEIGHT = 40
 PLAYER_VEL = 0
 VEL_TERMINAL = 5
