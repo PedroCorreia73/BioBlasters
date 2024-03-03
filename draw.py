@@ -1,4 +1,4 @@
-from jogo import FONT, WIN, NAVE, PLAYER_VEL, COVID
+from jogo import *
 import pygame
 
 def draw(player, elapsed_time, obstaculos):
