@@ -1,7 +1,6 @@
-from jogo import *
 import pygame
 
-def draw(player, elapsed_time, obstaculos):
+def draw(player, elapsed_time, obstaculos, FONT, WIN, NAVE, PLAYER_VEL, COVID):
     time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
     WIN.blit(time_text, (10, 10))
 
