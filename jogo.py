@@ -4,9 +4,9 @@ import random
 import math
 from draw import *
 
-pygame.font.init()
+pygame.font.init() #inicializar o font module (sem isso não dá para usar fontes)
 
-WIDTH, HEIGHT = 1200, 800
+WIDTH, HEIGHT = 1200, 800 #padrão: 1200 x 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Nome do Jogo")
 
@@ -28,17 +28,14 @@ BG_HEIGHT = BG.get_height()
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
 
-FONT = pygame.font.SysFont("comicsans", 30)
+FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
 
-OBSTACULO_WIDTH = 10
-OBSTACULO_HEIGHT = 10
+OBSTACULO_WIDTH = 35
+OBSTACULO_HEIGHT = 35
 OBSTACULO_VEL = 5
 
 
-
-
-
-
+# def main():
 
 run = True
 
@@ -46,14 +43,14 @@ player = pygame.Rect(PLAYER_WIDTH + 200, 400, PLAYER_WIDTH, PLAYER_HEIGHT)
 
 clock = pygame.time.Clock()
 
-start_time = time.time()
+start_time = time.time() #tempo que se passou desde a epoch
 elapsed_time = 0
 
-obstaculo_add_increment = 20  # 2000 milisegundos
+obstaculo_add_increment = 200  # 200 milisegundos
 obstaculo_count = 0
-
 obstaculos = []
-hit = False
+
+hit_obstaculo = False
 
 while run:
 
@@ -65,10 +62,11 @@ while run:
         scroll = 0
     # ---------------------
 
-    obstaculo_count += clock.tick(FPS)
-    elapsed_time = time.time() - start_time
+    obstaculo_count += clock.tick(FPS) #limitação de FPS
+    elapsed_time = time.time() - start_time #tempo que se passou desde que o jogo começou
 
-    if obstaculo_count > obstaculo_add_increment:
+    #Sistema de spawn de obstáculos
+    if obstaculo_count > obstaculo_add_increment: #tempo entre um obstáculo e o próximo obstáculo
         for _ in range(1):
             obstaculo_y = random.randint(0, HEIGHT - OBSTACULO_HEIGHT)
             obstaculo = pygame.Rect(WIDTH, obstaculo_y, OBSTACULO_WIDTH, OBSTACULO_HEIGHT)
@@ -94,34 +92,44 @@ while run:
     # player.y -= PLAYER_VEL
     # if keys[pygame.K_s] and player.y + PLAYER_VEL + player.height <= HEIGHT:
     # player.y += PLAYER_VEL
-    if keys[0] and player.y - PLAYER_VEL >= 0:
+    
+
+    #--borda de cima--
+    if player.y <= 10:
+        if keys[0] or PLAYER_VEL < 0:
+            PLAYER_VEL = 0
+            player.y = 10
+        else:
+            PLAYER_VEL += GRAVITY
+    #--borda de baixo--
+    elif player.y + PLAYER_HEIGHT * 1.5 >= HEIGHT:
+        if keys[0] and PLAYER_VEL <= 0:
+            PLAYER_VEL -= GRAVITY
+        else:
+            PLAYER_VEL = 0
+            player.y = HEIGHT - PLAYER_HEIGHT * 1.2
+    #--entre as bordas--
+    elif keys[0] and player.y - PLAYER_VEL >= 0:
         if PLAYER_VEL > -VEL_TERMINAL:
             PLAYER_VEL -= GRAVITY
     else:
         if PLAYER_VEL < VEL_TERMINAL:
             PLAYER_VEL += GRAVITY
-
-    if player.y + PLAYER_HEIGHT * 1.5 >= HEIGHT:
-        if keys[0]:
-            PLAYER_VEL -= GRAVITY
-        else:
-            PLAYER_VEL = 0
-            player.y = HEIGHT - PLAYER_HEIGHT * 1.5
-    elif player.y <= 0:
-        PLAYER_VEL = 1
     player.y += PLAYER_VEL
     # -----------------
 
+    #movimentação de obstáculos
     for obstaculo in obstaculos[:]:
         obstaculo.x -= OBSTACULO_VEL
         if obstaculo.x < 0 - OBSTACULO_WIDTH - 30:
             obstaculos.remove(obstaculo)
         if obstaculo.colliderect(player):
             obstaculos.remove(obstaculo)
-            hit = True
+            hit_obstaculo = True
             break
-
-    if hit:
+    
+    #hit de obstáculos
+    if hit_obstaculo:
         lost_text = FONT.render("Você perdeu!", 1, "blue")
         WIN.blit(lost_text, (WIDTH / 2 - lost_text.get_width() / 2, HEIGHT / 2 - lost_text.get_height() / 2))
         pygame.display.update()
@@ -133,3 +141,5 @@ while run:
 pygame.quit
 
 
+# if name == "main":
+# main()
