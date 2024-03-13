@@ -3,7 +3,8 @@ import pygame
 def tela():
     pygame.font.init() #inicializar o font module (sem isso não dá para usar fontes)
     pygame.display.init() # inicializar a tela (serve para poder obter as medidas da tela do usuário)
-    WIDTH, HEIGHT = pygame.display.get_desktop_sizes()[0] #obtém as medidas da tela do usuário
+    #WIDTH, HEIGHT = pygame.display.get_desktop_sizes()[0] #obtém as medidas da tela do usuário
+    WIDTH, HEIGHT = 1200, 600
     WIN = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Nome do Jogo")
     FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT

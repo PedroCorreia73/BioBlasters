@@ -2,18 +2,19 @@ import pygame
 import time
 import random
 import math
+from menus import tela_inicial
 from tela import tela, draw
 from constantes import *
-from background import criar_background
+from background import criar_background_jogo
 from personagens import gerar_personagens
 
 
 
 WIN , FONT = tela() # inicializa a tela com as medidas da tela do usuário
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
-
-BG = criar_background()
+BG = criar_background_jogo()
 BG_WIDTH, BG_HEIGHT = BG.get_width(), BG.get_height()
+tela_inicial(WIDTH, HEIGHT)
 
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
