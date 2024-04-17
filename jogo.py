@@ -2,42 +2,26 @@ import pygame
 import time
 import random
 import math
-from draw import *
+from menus import tela_inicial
+from tela import tela, draw
+from constantes import *
+from background import criar_background_jogo
+from personagens import gerar_personagens
 
-pygame.font.init() #inicializar o font module (sem isso não dá para usar fontes)
 
-WIDTH, HEIGHT = 1200, 800 #padrão: 1200 x 800
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Nome do Jogo")
 
-FPS = 100
+WIN , FONT = tela() # inicializa a tela com as medidas da tela do usuário
+WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
+BG = criar_background_jogo()
+BG_WIDTH, BG_HEIGHT = BG.get_width(), BG.get_height()
+run = tela_inicial(WIDTH, HEIGHT)
 
-PLAYER_WIDTH = 40
-PLAYER_HEIGHT = 40
-PLAYER_VEL = 0
-VEL_TERMINAL = 5
-GRAVITY = 12 / FPS
-
-COVID_imagem = pygame.image.load("covid.png")
-NAVE_imagem = pygame.image.load("nave.png")
-COVID = pygame.transform.scale(COVID_imagem, (50, 50))
-NAVE = pygame.transform.scale(NAVE_imagem, (PLAYER_WIDTH + 10, PLAYER_HEIGHT + 10))
-BG = pygame.image.load("background espaço.jpg")
-BG_WIDTH = BG.get_width()
-BG_HEIGHT = BG.get_height()
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
 
-FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
-
-OBSTACULO_WIDTH = 35
-OBSTACULO_HEIGHT = 35
-OBSTACULO_VEL = 5
+COVID, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
 
 
-# def main():
-
-run = True
 
 player = pygame.Rect(PLAYER_WIDTH + 200, 400, PLAYER_WIDTH, PLAYER_HEIGHT)
 
@@ -141,5 +125,3 @@ while run:
 pygame.quit
 
 
-# if name == "main":
-# main()
