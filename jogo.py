@@ -14,14 +14,14 @@ WIN , FONT = tela() # inicializa a tela com as medidas da tela do usuário
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
 BG = criar_background_jogo()
 BG_WIDTH, BG_HEIGHT = BG.get_width(), BG.get_height()
-tela_inicial(WIDTH, HEIGHT)
+run = tela_inicial(WIDTH, HEIGHT)
 
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
 
 COVID, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
 
-run = True
+
 
 player = pygame.Rect(PLAYER_WIDTH + 200, 400, PLAYER_WIDTH, PLAYER_HEIGHT)
 
