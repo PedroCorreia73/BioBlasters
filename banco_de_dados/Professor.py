@@ -8,5 +8,6 @@ class Professor:
         resultado = cls.consulta.fetchall()
         return resultado
 
-    def adicionar_professor(nome_professor, senha_professor):
+    @consultar
+    def adicionar_professor(cls, nome_professor, senha_professor):
         pass

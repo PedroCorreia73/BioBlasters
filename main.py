@@ -10,16 +10,19 @@ from personagens import gerar_personagens
 
 
 
+
+
 WIN , FONT = tela() # inicializa a tela com as medidas da tela do usuário
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
 BG = criar_background_jogo()
+BG = pygame.transform.scale(BG, (WIDTH, HEIGHT))
 BG_WIDTH, BG_HEIGHT = BG.get_width(), BG.get_height()
-run = tela_inicial(WIDTH, HEIGHT)
+run = tela_inicial(WIN)
 
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
 
-COVID, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
+INIMIGOS, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
 
 
 
@@ -120,7 +123,7 @@ while run:
         pygame.time.delay(1000)  # 1000 milisegundos
         break
 
-    draw(player, elapsed_time, obstaculos, FONT, WIN, NAVE, PLAYER_VEL, COVID)
+    draw(player, elapsed_time, obstaculos, FONT, WIN, NAVE, PLAYER_VEL, INIMIGOS)
 
 pygame.quit
 
