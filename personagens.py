@@ -11,7 +11,7 @@ def criar_inimigos():
 
 def criar_nave(PLAYER_WIDTH, PLAYER_HEIGHT):
     NAVE_imagem = pygame.image.load("imagens/sprites_ship.png")
-    NAVE = pygame.transform.scale(NAVE_imagem, (PLAYER_WIDTH + 10, PLAYER_HEIGHT + 10))
+    NAVE = pygame.transform.scale(NAVE_imagem, (PLAYER_WIDTH + 15, PLAYER_HEIGHT + 15))
     return NAVE
 
 def gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT):

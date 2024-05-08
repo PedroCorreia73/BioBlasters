@@ -46,6 +46,14 @@ itempergunta_count = 0
 itenspergunta = []
 hit_itempergunta = False
 
+pontuacao = 0
+pontuacao_ganha = 0
+t = 0
+
+hp = 100
+invencibilidade = False
+aux_inv_1 = 100
+
 while run:
 
     # loop da tela---------
@@ -57,12 +65,23 @@ while run:
             scroll = 0
     # ---------------------
 
+    #pontuação e tempo
     aux = 0
     aux += clock.tick(FPS)
     obstaculo_count += aux #limitação de FPS
     itempergunta_count += aux
-    elapsed_time = time.time() - start_time #tempo que se passou desde que o jogo começou
+    if not hit_itempergunta:
+        elapsed_time = time.time() - start_time - t #tempo que se passou desde que o jogo começou
+    if not hit_itempergunta:
+        pontuacao_tempo = round(elapsed_time)
+    pontuacao = pontuacao_tempo + pontuacao_ganha
 
+    #atualização de variáveis relacionadas à pontuação
+    if not hit_itempergunta:
+        aux1 = 0
+        aux2 = 0
+        ti = 0
+        tf = 0
     #Sistema de spawn de item de pergunta
     if not hit_itempergunta:
         if itempergunta_count > itempergunta_add_increment:
@@ -133,19 +152,32 @@ while run:
             obstaculo.x -= OBSTACULO_VEL
             if obstaculo.x < 0 - OBSTACULO_WIDTH - 30:
                 obstaculos.remove(obstaculo)
-            if obstaculo.colliderect(player):
+            if obstaculo.colliderect(player) and invencibilidade == False:
                 obstaculos.remove(obstaculo)
                 hit_obstaculo = True
                 break
-    
-    
-    #hit de obstáculos
+
+    #-------------------hit de obstáculos-------------------
     if hit_obstaculo:
+        if invencibilidade == False:
+            hp -= 10
+            invencibilidade = True
+            t_invencibilidade = time.time() + 2
+        print(hp)
+        hit_obstaculo = False
+    if invencibilidade == True and time.time() > t_invencibilidade:
+        invencibilidade = False
+        aux_inv_1 = 10
+    if invencibilidade:
+        aux_inv_1 += 1
+    if hp <= 0:
         lost_text = FONT.render("Você perdeu!", 1, "blue")
         WIN.blit(lost_text, (WIDTH / 2 - lost_text.get_width() / 2, HEIGHT / 2 - lost_text.get_height() / 2))
         pygame.display.update()
         pygame.time.delay(1000)  # 1000 milisegundos
         break
+    #---------------------------------------------------------
+
 
       #movimentação de itenspergunta
     if not hit_itempergunta:
@@ -157,8 +189,12 @@ while run:
                 itenspergunta.remove(itempergunta)
                 hit_itempergunta = True
     
-      #hit de obstáculos  
+      #caixa de pergunta
     if hit_itempergunta == True:
+        aux1 += 1
+        if aux1 == 1:
+            pontuacao_ganha += 100
+            ti = time.time()
         WIN.blit(bg_pergunta, origem_plano_resposta)
         texto_exemplo = "Isso é um enunciado bem longo da prova da fuvest que fala sobre algumas chatices de biologia/citologia/oquequerqueseja, mas o que importa é que isso está funcionando perfeitamente bem, desde que haja um número limite de caracteres para esse enunciado. Obrigado."
         fonte = pygame.font.SysFont("Arial", 30)
@@ -178,18 +214,19 @@ while run:
                 x += word_width + space
             x = pos[0]
             y = word_height
-
         keys1 = pygame.key.get_pressed()
         if keys1[pygame.K_a]:
+            aux2 += 1
+            if aux2 == 1:
+                tf = time.time()
+                t += tf - ti
+                pontuacao_ganha += 400
             print('c')
             PLAYER_VEL = PLAYER_VEL / 1.5
             pygame.time.delay(1000)
             hit_itempergunta = False
-    
         pygame.display.update()
-    
-    draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, INIMIGOS, hit_itempergunta)
-
+    draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, INIMIGOS, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv_1)
 pygame.quit
 
 
