@@ -1,10 +1,9 @@
 import pygame
 from Botao import Botao
 
-def tela_inicial(WIN :pygame.Surface):
+def menu_inicial(WIN :pygame.Surface):
     BG_INICIO = pygame.image.load("imagens/bg_inicial.png")
     WIN.blit(pygame.transform.scale(BG_INICIO, (WIN.get_width(), WIN.get_height())), (0, 0))
-    print(WIN.get_size())
     pygame.display.update()
     #iniciar_imagem = pygame.image.load("imagens/start.png")
     run = True

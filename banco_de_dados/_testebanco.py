@@ -1,11 +1,10 @@
-from conexao_banco_de_dados import *
-from Aluno import Aluno
+from Atores import Grupo, Administrador, Aluno
 from Grupo import Grupo
 
 
-grupo = Grupo("nome","senha")
+
+grupo = Grupo("grupo", "grupo")
 Grupo.adicionar_grupo(grupo)
-aluno = Aluno("Guilherme", 123123, grupo.id)
-Aluno.adicionar_aluno(aluno)
-print(Grupo.ver_grupos())
-print(Aluno.ver_alunos())
+aluno = Aluno("nome", "senha", grupo.id)
+aluno.realizar_cadastro()
+print(aluno.id)

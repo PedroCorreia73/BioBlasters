@@ -1,5 +1,4 @@
-from urllib3 import Retry
-from conexao_banco_de_dados import consultar
+from Banco_de_dados import acessar_banco
 
 class Grupo:
     def __init__(self, nome_grupo, senha_grupo):
@@ -8,22 +7,25 @@ class Grupo:
     
 
     @classmethod
-    @consultar
-    def ver_grupos(cls):
+    @acessar_banco
+    def consultar_grupos(cls):
         obter_perguntas = "SELECT * FROM grupo"
         cls.consulta.execute(obter_perguntas)
         resultado = cls.consulta.fetchall()
         return resultado
     
     @classmethod
-    @consultar
+    @acessar_banco
     def adicionar_grupo(cls, args):
-        grupo = args[0]
+        professor = args[0]
+        grupo = args[1]
+        
         adicionar_grupo = "INSERT INTO grupo(nome_grupo, senha_grupo) VALUES(%s, %s)"
         valores = (grupo._nome_grupo, grupo._senha_grupo)
         cls.consulta.execute(adicionar_grupo, valores)
         grupo._id_grupo = cls.consulta.lastrowid
-        return None
+        adicionar_id_grupo_no_prof = "UPDATE professor SET idGrupo = %s WHERE idProfessor = %s"
+        cls.consulta.execute(adicionar_id_grupo_no_prof, (grupo.id, professor.id))
     
 
     @property

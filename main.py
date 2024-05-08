@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 import math
-from menus import tela_inicial
+from menus import menu_inicial
 from tela import tela, draw
 from constantes import *
 from background import criar_background_jogo
@@ -17,10 +17,11 @@ WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
 BG = criar_background_jogo()
 BG = pygame.transform.scale(BG, (WIDTH, HEIGHT))
 BG_WIDTH, BG_HEIGHT = BG.get_width(), BG.get_height()
-run = tela_inicial(WIN)
+run = menu_inicial(WIN)
 
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
+
 
 INIMIGOS, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
 
@@ -45,7 +46,7 @@ while run:
     for i in range(0, tiles):
         WIN.blit(BG, (i * BG_WIDTH + scroll, 0))
     scroll -= 0.5
-    if abs(scroll) > BG_WIDTH:
+    if -scroll > BG_WIDTH:
         scroll = 0
     # ---------------------
 

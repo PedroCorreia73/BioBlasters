@@ -1,7 +1,7 @@
-from conexao_banco_de_dados import consultar
+from Banco_de_dados import acessar_banco
 
 class Pergunta:
-    @consultar
+    @acessar_banco
     def ver_perguntas(cls):
         obter_perguntas = "SELECT * FROM pergunta"
         cls.consulta.execute(obter_perguntas)
