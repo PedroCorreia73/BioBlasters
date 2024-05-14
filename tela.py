@@ -10,12 +10,13 @@ def tela():
     FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
     return WIN, FONT
 
-def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, COVID, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv_1):
+def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, COVID, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv, hp, balas):
 
 
     #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
     #WIN.blit(time_text, (10, 10))
-
+    hp_text = FONT.render(f"HP: {hp}", 1, "white")
+    WIN.blit(hp_text, (10, 10))
     pontuacao_text = FONT.render(f"Pontuação: {pontuacao}", 1, "white")
     if aux1 == 1:
          pontuacao_text.set_alpha(0)
@@ -24,11 +25,12 @@ def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYE
     #rotação da nave, carregamento da imagem na tela e piscadinha
     NAVE2 = pygame.transform.rotate(NAVE, -PLAYER_VEL * 10)
     if invencibilidade:
-        if str(aux_inv_1)[-2] in ["0", "2", "4", "6", "8"]:
+        if str(aux_inv)[-2] in ["0", "2", "4", "6", "8"]:
             NAVE2.set_alpha(0)
-        if str(aux_inv_1)[-2] in ["1", "3", "5", "7", "9"]:
+        if str(aux_inv)[-2] in ["1", "3", "5", "7", "9"]:
             NAVE2.set_alpha(1000)
-    WIN.blit(NAVE2, (player.x - 12, player.y - 15))
+    NAVE2_RECT = NAVE2.get_rect(center = (player.x + 15, player.y + 15))
+    WIN.blit(NAVE2, (NAVE2_RECT))
     #pygame.draw.rect(WIN, "green", player) #hitbox do player
 
     for obstaculo in obstaculos:
@@ -41,5 +43,8 @@ def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYE
     for itempergunta in itenspergunta:
         pygame.draw.rect(WIN, "blue", itempergunta) #hitbox dos obstáculos
         #WIN.blit(COVID, (itempergunta.x - 8, itempergunta.y -8))
+    
+    for bala in balas:
+         pygame.draw.rect(WIN, "grey", bala)
     if not hit_itempergunta:
         pygame.display.update()

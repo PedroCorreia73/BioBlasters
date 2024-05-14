@@ -46,16 +46,22 @@ itempergunta_count = 0
 itenspergunta = []
 hit_itempergunta = False
 
+balas = []
+mochila_balas = [1, 1]
+
 pontuacao = 0
 pontuacao_ganha = 0
 t = 0
 
 hp = 100
 invencibilidade = False
-aux_inv_1 = 100
+aux_inv = 100
+
+vel_player_atual = PLAYER_VEL
 
 while run:
-
+    keys_teclado = pygame.key.get_pressed()
+    keys_mouse = pygame.mouse.get_pressed()
     # loop da tela---------
     if not hit_itempergunta:
         for i in range(0, tiles):
@@ -102,6 +108,37 @@ while run:
                 obstaculo_add_increment = max(200, obstaculo_add_increment - 50)
                 obstaculo_count = 0
 
+    if not keys_teclado[pygame.K_SPACE]:
+        aux_bala = 0
+    # Sistema TEMPORÁRIO de coleta de balas
+    if keys_teclado[pygame.K_c]:
+        mochila_balas.append(1)
+    # Sistema TEMPORÁRIO de spawn de balas
+    if not hit_itempergunta:
+        keys2 = pygame.key.get_pressed()
+        if keys_teclado[pygame.K_SPACE] and aux_bala == 0:
+            aux_bala = 1
+            vel_player_atual = PLAYER_VEL
+            if 1 in mochila_balas and aux_bala == 1:
+                bala = pygame.Rect(player.x + 30, player.y + 15, BALA_WIDTH, BALA_HEIGHT)
+                #bala = pygame.Rect(player.x + 30 - math.cos(math.radians(-vel_player_atual * 10)) * 10, player.y + 15 - math.sin(math.radians(-vel_player_atual * 10)) * 15, BALA_WIDTH, BALA_HEIGHT)
+                balas.append(bala)
+                mochila_balas.remove(1)
+    #movimentação TEMPORÁRIA de balas
+    if not hit_itempergunta:
+        for bala in balas:
+            bala.x += BALA_VEL
+            #bala.x += BALA_VEL * math.cos(math.radians(-vel_player_atual * 10) * 1.5)
+            #bala.y += BALA_VEL * math.sin(math.radians(+vel_player_atual * 10) * 1.5)
+            if bala.x > WIDTH:
+                balas.remove(bala)
+    #hit TEMPORÁRIO de balas
+    print(-vel_player_atual * 10)
+    for bala in balas:
+        for obstaculo in obstaculos:
+            if bala.y in range(obstaculo.y - 15, obstaculo.y + OBSTACULO_HEIGHT + 5) and bala.x in range(obstaculo.x - 5, obstaculo.x + OBSTACULO_WIDTH):
+                obstaculos.remove(obstaculo)
+
     # fechar o jogo
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -110,7 +147,6 @@ while run:
     # -------------
 
     # comandos da nave
-    keys = pygame.mouse.get_pressed()
 
     # if keys[pygame.K_a] and player.x - PLAYER_VEL >= 0:
     # player.x -= (PLAYER_VEL - 3)
@@ -124,20 +160,20 @@ while run:
     if not hit_itempergunta:
         #--borda de cima--
         if player.y <= 10:
-            if keys[0] or PLAYER_VEL < 0:
+            if keys_mouse[0] or PLAYER_VEL < 0:
                 PLAYER_VEL = 0
                 player.y = 10
             else:
                 PLAYER_VEL += GRAVITY
         #--borda de baixo--
         elif player.y + PLAYER_HEIGHT * 1.5 >= HEIGHT:
-            if keys[0] and PLAYER_VEL <= 0:
+            if keys_mouse[0] and PLAYER_VEL <= 0:
                 PLAYER_VEL -= GRAVITY
             else:
                 PLAYER_VEL = 0
                 player.y = HEIGHT - PLAYER_HEIGHT * 1.2
         #--entre as bordas--
-        elif keys[0] and player.y - PLAYER_VEL >= 0:
+        elif keys_mouse[0] and player.y - PLAYER_VEL >= 0:
             if PLAYER_VEL > -VEL_TERMINAL:
                 PLAYER_VEL -= GRAVITY
         else:
@@ -148,7 +184,7 @@ while run:
 
     #movimentação de obstáculos
     if not hit_itempergunta:
-        for obstaculo in obstaculos[:]:
+        for obstaculo in obstaculos[:]: #esses ':' fazem a cópia da lista
             obstaculo.x -= OBSTACULO_VEL
             if obstaculo.x < 0 - OBSTACULO_WIDTH - 30:
                 obstaculos.remove(obstaculo)
@@ -167,9 +203,9 @@ while run:
         hit_obstaculo = False
     if invencibilidade == True and time.time() > t_invencibilidade:
         invencibilidade = False
-        aux_inv_1 = 10
+        aux_inv = 10
     if invencibilidade:
-        aux_inv_1 += 1
+        aux_inv += 1
     if hp <= 0:
         lost_text = FONT.render("Você perdeu!", 1, "blue")
         WIN.blit(lost_text, (WIDTH / 2 - lost_text.get_width() / 2, HEIGHT / 2 - lost_text.get_height() / 2))
@@ -188,7 +224,7 @@ while run:
             if itempergunta.colliderect(player):
                 itenspergunta.remove(itempergunta)
                 hit_itempergunta = True
-    
+
       #caixa de pergunta
     if hit_itempergunta == True:
         aux1 += 1
@@ -196,9 +232,15 @@ while run:
             pontuacao_ganha += 100
             ti = time.time()
         WIN.blit(bg_pergunta, origem_plano_resposta)
-        texto_exemplo = "Isso é um enunciado bem longo da prova da fuvest que fala sobre algumas chatices de biologia/citologia/oquequerqueseja, mas o que importa é que isso está funcionando perfeitamente bem, desde que haja um número limite de caracteres para esse enunciado. Obrigado."
+        enunciado_exemplo = "Isso é um enunciado bem longo da prova da fuvest que fala sobre algumas chatices de biologia/citologia/oquequerqueseja, mas o que importa é que isso está funcionando perfeitamente bem, desde que haja um número limite de caracteres para esse enunciado. Obrigado."
+        a_exemplo = "A) Essa não é a alternativa correta."
+        b_exemplo = "B) Muito menos essa."
+        c_exemplo = "C) Nem me fale dessa!"
+        d_exemplo = "D) Essa parece boa, mas nem tanto."
+        e_exemplo = "E) Hmmmmmmmmmmmmmmm..."
+        texto_completo_exemplo = enunciado_exemplo + "\n" + a_exemplo + "\n" + b_exemplo + "\n" + c_exemplo + "\n" + d_exemplo + "\n" + e_exemplo
         fonte = pygame.font.SysFont("Arial", 30)
-        collection = [word.split() for word in texto_exemplo.splitlines()]
+        collection = [word.split(' ') for word in texto_completo_exemplo.splitlines()]
         space = fonte.size(' ')[0]
         pos = origem_plano_resposta[0] + 10, origem_plano_resposta[1] + 10
         x = pos[0]
@@ -213,9 +255,8 @@ while run:
                 WIN.blit(word_surface, (x,y))
                 x += word_width + space
             x = pos[0]
-            y = word_height
-        keys1 = pygame.key.get_pressed()
-        if keys1[pygame.K_a]:
+            y += word_height
+        if keys_teclado[pygame.K_a]:
             aux2 += 1
             if aux2 == 1:
                 tf = time.time()
@@ -226,7 +267,7 @@ while run:
             pygame.time.delay(1000)
             hit_itempergunta = False
         pygame.display.update()
-    draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, INIMIGOS, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv_1)
+    draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, INIMIGOS, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv, hp, balas)
 pygame.quit
 
 
