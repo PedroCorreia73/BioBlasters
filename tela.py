@@ -10,7 +10,7 @@ def tela():
     FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
     return WIN, FONT
 
-def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, COVID, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv, hp, balas):
+def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, IMG_INIMIGO, IMG_ITEM_PERGUNTA, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv, hp, balas):
 
 
     #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
@@ -38,11 +38,11 @@ def draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYE
        #     pass
         #else:
             #pygame.draw.rect(WIN, "yellow", obstaculo) #hitbox dos obstáculos
-            WIN.blit(COVID, (obstaculo.x - 8, obstaculo.y -8))
+            WIN.blit(IMG_INIMIGO, (obstaculo.x - 8, obstaculo.y -8))
 
     for itempergunta in itenspergunta:
         pygame.draw.rect(WIN, "blue", itempergunta) #hitbox dos obstáculos
-        #WIN.blit(COVID, (itempergunta.x - 8, itempergunta.y -8))
+        WIN.blit(IMG_ITEM_PERGUNTA, (itempergunta.x - 8, itempergunta.y -8))
     
     for bala in balas:
          pygame.draw.rect(WIN, "grey", bala)

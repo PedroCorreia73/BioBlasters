@@ -25,9 +25,7 @@ run = tela_inicial(WIN)
 scroll = 0
 tiles = math.ceil(WIDTH / BG_WIDTH) + 1
 
-INIMIGOS, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
-
-
+IMG_ITEM_PERGUNTA, IMG_INIMIGO, NAVE = gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT)
 
 player = pygame.Rect(PLAYER_WIDTH + 200, 400, PLAYER_WIDTH, PLAYER_HEIGHT)
 
@@ -70,6 +68,7 @@ while run:
         if abs(scroll) > BG_WIDTH:
             scroll = 0
     # ---------------------
+    WIN.blit(pygame.transform.scale(pygame.image.load("imagens/bg_gr_overlay.png").convert_alpha(), (WIDTH, HEIGHT)), (0,0))
 
     #pontuação e tempo
     aux = 0
@@ -198,7 +197,6 @@ while run:
             hp -= 10
             invencibilidade = True
             t_invencibilidade = time.time() + 2
-        print(hp)
         hit_obstaculo = False
     if invencibilidade == True and time.time() > t_invencibilidade:
         invencibilidade = False
@@ -231,7 +229,7 @@ while run:
             pontuacao_ganha += 100
             ti = time.time()
         WIN.blit(bg_pergunta, origem_plano_resposta)
-        enunciado_exemplo = "Isso é um enunciado bem longo da prova da fuvest que fala sobre algumas chatices de biologia/citologia/oquequerqueseja, mas o que importa é que isso está funcionando perfeitamente bem, desde que haja um número limite de caracteres para esse enunciado. Obrigado."
+        enunciado_exemplo = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Enunciado - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
         a_exemplo = "A) Essa não é a alternativa correta."
         b_exemplo = "B) Muito menos essa."
         c_exemplo = "C) Nem me fale dessa!"
@@ -261,12 +259,12 @@ while run:
                 tf = time.time()
                 t += tf - ti
                 pontuacao_ganha += 400
-            print('c')
+            print('a')
             PLAYER_VEL = PLAYER_VEL / 1.5
             pygame.time.delay(1000)
             hit_itempergunta = False
         pygame.display.update()
-    draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, INIMIGOS, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv, hp, balas)
+    draw(player, elapsed_time, obstaculos, itenspergunta, FONT, WIN, NAVE, PLAYER_VEL, IMG_INIMIGO, IMG_ITEM_PERGUNTA, hit_itempergunta, pontuacao, aux1, invencibilidade, aux_inv, hp, balas)
 pygame.quit
 
 
