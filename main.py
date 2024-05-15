@@ -68,7 +68,6 @@ while run:
         if abs(scroll) > BG_WIDTH:
             scroll = 0
     # ---------------------
-    WIN.blit(pygame.transform.scale(pygame.image.load("imagens/bg_gr_overlay.png").convert_alpha(), (WIDTH, HEIGHT)), (0,0))
 
     #pontuação e tempo
     aux = 0
