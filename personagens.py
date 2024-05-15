@@ -1,16 +1,20 @@
 import pygame
+import random
+def criar_item_pergunta():
+    chance = random.randint(0, 10)
+    
 
-def criar_covid():
-    COVID_imagem = pygame.image.load("imagens/covid.png")
-    COVID = pygame.transform.scale(COVID_imagem, (50, 50))
-    return COVID
+def criar_inimigos():
+    INIMIGOS = pygame.image.load("imagens/sprite_enemy.png")
+    INIMIGOS = pygame.transform.scale(INIMIGOS, (50, 50))
+    return INIMIGOS
 
 def criar_nave(PLAYER_WIDTH, PLAYER_HEIGHT):
-    NAVE_imagem = pygame.image.load("imagens/nave.png")
-    NAVE = pygame.transform.scale(NAVE_imagem, (PLAYER_WIDTH + 10, PLAYER_HEIGHT + 10))
+    NAVE_imagem = pygame.image.load("imagens/sprites_ship.png")
+    NAVE = pygame.transform.scale(NAVE_imagem, (PLAYER_WIDTH + 15, PLAYER_HEIGHT + 15))
     return NAVE
 
 def gerar_personagens(PLAYER_WIDTH, PLAYER_HEIGHT):
-    COVID = criar_covid()
+    INIMIGOS = criar_inimigos()
     NAVE = criar_nave(PLAYER_WIDTH, PLAYER_HEIGHT)
-    return COVID, NAVE
+    return INIMIGOS, NAVE
