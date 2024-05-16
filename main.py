@@ -3,19 +3,21 @@ import time
 import random
 import math
 from menus import tela_inicial
-from classes.tela import Tela
+from classes.tela import TelaJogo
 from constantes import *
 from background import criar_background_jogo
-from personagens import gerar_personagens
 from classes.obstaculo import Obstaculo, Obstaculos
 from classes.nave import Nave
 from classes.bala import Bala
 from classes.item_pergunta import ItemPergunta
+from classes.pontuacao import Pontuacao
 
 
 
 
-tela = Tela() # inicializa a tela com as medidas da tela do usuário
+tela = TelaJogo() # inicializa a tela com as medidas da tela do usuário
+nave = Nave() # iniciando a nave do jogador
+pontuacao = Pontuacao() #Iniciando a pontuação
 SURFACE = pygame.Surface((tela.WIDTH, tela.HEIGHT), pygame.SRCALPHA)
 BG = criar_background_jogo()
 BG = pygame.transform.scale(BG, (tela.WIDTH, tela.HEIGHT))
@@ -24,13 +26,10 @@ bg_pergunta = pygame.image.load("imagens/bg_pergunta.png")
 origem_plano_resposta = (((tela.WIDTH - bg_pergunta.get_width())/2, (tela.HEIGHT - bg_pergunta.get_height())/2))
 run = tela_inicial(tela.WIN)
 
-nave = Nave() # iniciando a nave do jogador
+
 scroll = 0
 tiles = math.ceil(tela.WIDTH / BG_WIDTH) + 1
 
-IMG_ITEM_PERGUNTA, IMG_INIMIGO, NAVE = gerar_personagens(nave.WIDTH, nave.HEIGHT)
-
-player = pygame.Rect(nave.WIDTH + 200, 400, nave.WIDTH, nave.HEIGHT)
 
 clock = pygame.time.Clock()
 
@@ -41,27 +40,26 @@ obstaculo_add_increment = 200  # 200 milisegundos
 obstaculo_count = 0
 
 
-itempergunta_add_increment = 2000
-itempergunta_count = 0
+item_pergunta_add_increment = 2000
+item_pergunta_count = 0
 itenspergunta = []
-hit_itempergunta = False
 
 balas = []
 mochila_balas = [1, 1]
 
-pontuacao = 0
-pontuacao_ganha = 0
+
+
 t = 0
 
 aux_inv = 100
 
-vel_player_atual = nave.vel
+
 
 while run:
     keys_teclado = pygame.key.get_pressed()
     keys_mouse = pygame.mouse.get_pressed()
     # loop da tela---------
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         for i in range(0, tiles):
             tela.WIN.blit(BG, (i * BG_WIDTH + scroll, 0))
         scroll -= 0.5
@@ -73,34 +71,34 @@ while run:
     aux = 0
     aux += clock.tick(FPS)
     obstaculo_count += aux #limitação de FPS
-    itempergunta_count += aux
-    if not hit_itempergunta:
+    item_pergunta_count += aux
+    if not nave.pegou_item_pergunta:
         elapsed_time = time.time() - start_time - t #tempo que se passou desde que o jogo começou
-    if not hit_itempergunta:
-        pontuacao_tempo = round(elapsed_time)
-    pontuacao = pontuacao_tempo + pontuacao_ganha
+    if not nave.pegou_item_pergunta:
+        pontuacao.tempo = round(elapsed_time)
+    pontuacao.atual = pontuacao.tempo + pontuacao.ganha
 
     #atualização de variáveis relacionadas à pontuação
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         aux1 = 0
         aux2 = 0
         ti = 0
         tf = 0
     #Sistema de spawn de item de pergunta
-    if not hit_itempergunta:
-        if itempergunta_count > itempergunta_add_increment:
+    if not nave.pegou_item_pergunta:
+        if item_pergunta_count > item_pergunta_add_increment:
             for _ in range(1):
-                itempergunta_y = random.randint(0, tela.HEIGHT - Obstaculo.HEIGHT)
-                itempergunta = pygame.Rect(tela.WIDTH, itempergunta_y, Obstaculo.WIDTH, Obstaculo.HEIGHT)
-                itenspergunta.append(itempergunta)
-            #itempergunta_add_increment = max(200, itempergunta_add_increment - 50)
-            itempergunta_count = 0
+                item_pergunta_y = random.randint(0, tela.HEIGHT - Obstaculo.HEIGHT)
+                item_pergunta = ItemPergunta(tela.WIDTH, item_pergunta_y, Obstaculo.WIDTH, Obstaculo.HEIGHT)
+                itenspergunta.append(item_pergunta)
+            #item_pergunta_add_increment = max(200, item_pergunta_add_increment - 50)
+            item_pergunta_count = 0
     
     #Sistema de spawn de obstáculos
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         if obstaculo_count > obstaculo_add_increment: #tempo entre um obstáculo e o próximo obstáculo
                 for _ in range(1):
-                    obstaculo_y = random.randint(0, tela.HEIGHT - Obstaculo.HEIGHT)
+                    obstaculo_y = random.randint(0, tela.HEIGHT - Obstaculo.HEIGHT) #criando o local no eixo y no qual o obtáculo surgirá
                     obstaculo = Obstaculo(tela.WIDTH, obstaculo_y)
                     Obstaculos.append(obstaculo)
                 obstaculo_add_increment = max(200, obstaculo_add_increment - 50)
@@ -112,18 +110,17 @@ while run:
     if keys_teclado[pygame.K_c]:
         mochila_balas.append(1)
     # Sistema de spawn de balas
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         keys2 = pygame.key.get_pressed()
         if keys_teclado[pygame.K_SPACE] and aux_bala == 0:
             aux_bala = 1
-            vel_player_atual = nave.vel
             if 1 in mochila_balas and aux_bala == 1:
-                bala = pygame.Rect(player.x + 30, player.y + 15, Bala.WIDTH, Bala.HEIGHT)
-                #bala = pygame.Rect(player.x + 30 - math.cos(math.radians(-vel_player_atual * 10)) * 10, player.y + 15 - math.sin(math.radians(-vel_player_atual * 10)) * 15, Bala.WIDTH, Bala.HEIGHT)
+                bala = pygame.Rect(nave.x + 30, nave.y + 15, Bala.WIDTH, Bala.HEIGHT)
+                #bala = pygame.Rect(nave.x + 30 - math.cos(math.radians(-vel_player_atual * 10)) * 10, nave.y + 15 - math.sin(math.radians(-vel_player_atual * 10)) * 15, Bala.WIDTH, Bala.HEIGHT)
                 balas.append(bala)
                 mochila_balas.remove(1)
     #movimentação de balas
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         for bala in balas:
             bala.x += Bala.VEL
             #bala.x += Bala.VEL * math.cos(math.radians(-vel_player_atual * 10) * 1.5)
@@ -145,47 +142,47 @@ while run:
 
     # comandos da nave
 
-    # if keys[pygame.K_a] and player.x - PLAYER_VEL >= 0:
-    # player.x -= (PLAYER_VEL - 3)
-    # if keys[pygame.K_d] and player.x + PLAYER_VEL + player.width <= WIDTH:
-    # player.x += PLAYER_VEL
-    # if keys[pygame.K_w] and player.y - PLAYER_VEL >= 0:
-    # player.y -= PLAYER_VEL
-    # if keys[pygame.K_s] and player.y + PLAYER_VEL + player.height <= HEIGHT:
-    # player.y += PLAYER_VEL
+    # if keys[pygame.K_a] and nave.x - PLAYER_VEL >= 0:
+    # nave.x -= (PLAYER_VEL - 3)
+    # if keys[pygame.K_d] and nave.x + PLAYER_VEL + nave.width <= WIDTH:
+    # nave.x += PLAYER_VEL
+    # if keys[pygame.K_w] and nave.y - PLAYER_VEL >= 0:
+    # nave.y -= PLAYER_VEL
+    # if keys[pygame.K_s] and nave.y + PLAYER_VEL + nave.height <= HEIGHT:
+    # nave.y += PLAYER_VEL
     
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         #--borda de cima--
-        if player.y <= 10:
+        if nave.y <= 10:
             if keys_mouse[0] or nave.vel < 0:
                 nave.vel = 0
-                player.y = 10
+                nave.y = 10
             else:
                 nave.vel += GRAVITY
         #--borda de baixo--
-        elif player.y + nave.HEIGHT * 1.5 >= tela.HEIGHT:
+        elif nave.y + nave.HEIGHT * 1.5 >= tela.HEIGHT:
             if keys_mouse[0] and nave.vel <= 0:
                 nave.vel -= GRAVITY
             else:
                 nave.vel = 0
-                player.y = tela.HEIGHT - nave.HEIGHT * 1.2
+                nave.y = tela.HEIGHT - nave.HEIGHT * 1.2
         #--entre as bordas--
-        elif keys_mouse[0] and player.y - nave.vel >= 0:
+        elif keys_mouse[0] and nave.y - nave.vel >= 0:
             if nave.vel > -VEL_TERMINAL:
                 nave.vel -= GRAVITY
         else:
             if nave.vel < VEL_TERMINAL:
                 nave.vel += GRAVITY
-        player.y += nave.vel
+        nave.y += nave.vel
         # -----------------
 
     #movimentação de obstáculos
-    if not hit_itempergunta:
+    if not nave.pegou_item_pergunta:
         for obstaculo in Obstaculos.itens():
             obstaculo.x -= Obstaculo.VEL
             if obstaculo.x < 0 - Obstaculo.WIDTH - 30:
                 Obstaculos.remove(obstaculo)
-            if obstaculo.colliderect(player) and nave.invencibilidade == False:
+            if obstaculo.colliderect(nave) and nave.invencibilidade == False:
                 Obstaculos.remove(obstaculo)
                 nave.colidiu_obstaculo = True
                 break
@@ -212,20 +209,20 @@ while run:
 
 
       #movimentação de itenspergunta
-    if not hit_itempergunta:
-        for itempergunta in itenspergunta[:]:
-            itempergunta.x -= Obstaculo.VEL
-            if itempergunta.x < 0 - Obstaculo.WIDTH - 30:
-                itenspergunta.remove(itempergunta)
-            if itempergunta.colliderect(player):
-                itenspergunta.remove(itempergunta)
-                hit_itempergunta = True
+    if not nave.pegou_item_pergunta:
+        for item_pergunta in itenspergunta[:]:
+            item_pergunta.x -= Obstaculo.VEL
+            if item_pergunta.x < 0 - Obstaculo.WIDTH - 30:
+                itenspergunta.remove(item_pergunta)
+            if item_pergunta.colliderect(nave):
+                itenspergunta.remove(item_pergunta)
+                nave.pegou_item_pergunta = True
 
       #caixa de pergunta
-    if hit_itempergunta == True:
+    if nave.pegou_item_pergunta == True:
         aux1 += 1
         if aux1 == 1:
-            pontuacao_ganha += 100
+            pontuacao.ganha += 100
             ti = time.time()
         tela.WIN.blit(bg_pergunta, origem_plano_resposta)
         enunciado_exemplo = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Enunciado - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
@@ -257,12 +254,12 @@ while run:
             if aux2 == 1:
                 tf = time.time()
                 t += tf - ti
-                pontuacao_ganha += 400
+                pontuacao.ganha += 400
             print('a')
             nave.vel = nave.vel / 1.5
             pygame.time.delay(1000)
-            hit_itempergunta = False
+            nave.pegou_item_pergunta = False
         pygame.display.update()
-
-    tela.desenhar(player, elapsed_time, Obstaculos.itens(), itenspergunta, tela.FONT, tela.WIN, NAVE, nave.vel, IMG_INIMIGO, IMG_ITEM_PERGUNTA, hit_itempergunta, pontuacao, aux1, nave.invencibilidade, aux_inv, nave.hp, balas)
+    tela.desenhar(nave, elapsed_time, itenspergunta,
+                    pontuacao, aux1, aux_inv, balas)
 pygame.quit
