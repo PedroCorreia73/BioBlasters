@@ -1,4 +1,6 @@
 import pygame 
+from .colecao_itens import ColecaoItens
+
 class Obstaculo(pygame.Rect):
 
     WIDTH = 35
@@ -15,18 +17,6 @@ class Obstaculo(pygame.Rect):
         return IMG_INIMIGO
     
 
-class Obstaculos:
-    obstaculos = []
-
-    @classmethod
-    def append(cls, obstaculo):
-        cls.obstaculos.append(obstaculo)
-    @classmethod
-    def remove(cls, obstaculo):
-        cls.obstaculos.remove(obstaculo)
-    @classmethod
-    def __getitem__(cls, indice):
-        return cls.obstaculos[indice]
-    @classmethod
-    def itens(cls):
-        return cls.obstaculos
+class Obstaculos(ColecaoItens):
+    def __init__(self):
+        super().__init__(200)

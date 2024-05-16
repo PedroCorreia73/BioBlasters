@@ -1,4 +1,5 @@
 import pygame
+from .colecao_itens import ColecaoItens
 
 class ItemPergunta(pygame.Rect):
 
@@ -10,3 +11,8 @@ class ItemPergunta(pygame.Rect):
         IMG_ITEM_PERGUNTA = pygame.image.load("imagens/quiz_item.png")
         IMG_ITEM_PERGUNTA = pygame.transform.scale(IMG_ITEM_PERGUNTA, (50, 50))
         return IMG_ITEM_PERGUNTA
+    
+class ItensPergunta(ColecaoItens):
+    def __init__(self):
+        super().__init__(2000)
+    

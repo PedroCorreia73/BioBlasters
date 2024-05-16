@@ -1,5 +1,4 @@
 import pygame
-from Botao import Botao
 
 
 

@@ -5,6 +5,11 @@ from .item_pergunta import ItemPergunta
 
 class TelaJogo:
 
+
+    def criar_background(self):
+        BG = pygame.image.load("imagens/bg_start_v3.png").convert_alpha()
+        self.BG = pygame.transform.scale(BG, (self.WIDTH, self.HEIGHT))
+
     def __init__(self):
         pygame.font.init() #inicializar o font module (sem isso não dá para usar fontes)
         pygame.display.init() # inicializar a tela (serve para poder obter as medidas da tela do usuário)
@@ -13,8 +18,9 @@ class TelaJogo:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("BioBlasters")
         self.FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
+        self.criar_background()
 
-    def desenhar(self, nave, elapsed_time, itenspergunta, pontuacao, aux1, aux_inv, balas):
+    def desenhar(self, nave, elapsed_time, pontuacao, aux1, aux_inv, balas, itens_pergunta, obstaculos):
         
         #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
         #WIN.blit(time_text, (10, 10))
@@ -36,18 +42,18 @@ class TelaJogo:
         self.WIN.blit(NAVE2, (NAVE2_RECT))
         #pygame.draw.rect(WIN, "green", nave) #hitbox do nave
 
-        for obstaculo in Obstaculos.itens():
+        for obstaculo in obstaculos.itens():
             #if hit_itempergunta is True and origem_plano_resposta[0] < obstaculo.x < origem_plano_resposta[0] + bgp.get_width() and origem_plano_resposta[1] < obstaculo.y and origem_plano_resposta[1] + bgp.get_height():
         #     pass
             #else:
                 #pygame.draw.rect(WIN, "yellow", obstaculo) #hitbox dos obstáculos
                 self.WIN.blit(Obstaculo.gerar_imagem(), (obstaculo.x - 8, obstaculo.y -8))
 
-        for itempergunta in itenspergunta:
+        for itempergunta in itens_pergunta.itens():
             pygame.draw.rect(self.WIN, "blue", itempergunta) #hitbox dos obstáculos
             self.WIN.blit(ItemPergunta.gerar_imagem(), (itempergunta.x - 8, itempergunta.y -8))
         
-        for bala in balas:
+        for bala in balas.itens():
             pygame.draw.rect(self.WIN, "grey", bala)
             self.WIN.blit(pygame.transform.rotozoom(pygame.image.load("imagens/shot.png"), 0, 3), (bala.x, bala.y))
         if not nave.pegou_item_pergunta:

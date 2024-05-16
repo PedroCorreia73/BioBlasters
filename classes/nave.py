@@ -10,6 +10,7 @@ class Nave(pygame.Rect):
         self.invencibilidade = False
         self.colidiu_obstaculo = False
         self.pegou_item_pergunta = False
+        self.mochila_balas = [1, 1]
         super().__init__(self.WIDTH + 200, 400, self.WIDTH, self.HEIGHT)
     
     def gerar_imagem(self):
