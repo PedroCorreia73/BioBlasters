@@ -238,5 +238,3 @@ def jogar(tela):
         tela.desenhar(nave, elapsed_time,
                         pontuacao, aux1, aux_inv, balas, itens_pergunta, obstaculos)
     return False
-if __name__ == "__main__":
-    jogar()
