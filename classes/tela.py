@@ -1,4 +1,5 @@
 import pygame
+import pygame_gui
 from .obstaculo import Obstaculo, Obstaculos
 from .item_pergunta import ItemPergunta
 
@@ -18,6 +19,7 @@ class TelaJogo:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("BioBlasters")
         self.FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
+        self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="botoes/configuracoes.json")
         self.criar_background()
 
     def desenhar(self, nave, elapsed_time, pontuacao, aux1, aux_inv, balas, itens_pergunta, obstaculos):
