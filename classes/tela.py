@@ -22,14 +22,14 @@ class TelaJogo:
         self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="botoes/configuracoes.json")
         self.criar_background()
 
-    def desenhar(self, nave, elapsed_time, pontuacao, aux1, aux_inv, balas, itens_pergunta, obstaculos):
+    def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, aux_inv, balas, itens_pergunta, obstaculos):
         
         #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
         #WIN.blit(time_text, (10, 10))
         hp_text = self.FONT.render(f"HP: {nave.hp}", 1, "white")
         self.WIN.blit(hp_text, (10, 10))
         pontuacao_text = self.FONT.render(f"Pontuação: {pontuacao.atual}", 1, "white")
-        if aux1 == 1:
+        if aux_pontuacao_resposta == 1:
             pontuacao_text.set_alpha(0)
         self.WIN.blit(pontuacao_text, (200, 10))
 

@@ -50,10 +50,10 @@ def jogar(tela):
         # ---------------------
 
         #pontuação e tempo
-        aux = 0
-        aux += clock.tick(Jogo.FPS)
-        obstaculos.contagem += aux #limitação de FPS
-        itens_pergunta.contagem += aux
+        aux_clock = 0
+        aux_clock += clock.tick(Jogo.FPS)
+        obstaculos.contagem += aux_clock #limitação de FPS
+        itens_pergunta.contagem += aux_clock
         if not nave.pegou_item_pergunta:
             elapsed_time = time.time() - start_time - t #tempo que se passou desde que o jogo começou
             pontuacao.tempo = round(elapsed_time)
@@ -61,8 +61,8 @@ def jogar(tela):
 
         #atualização de variáveis relacionadas à pontuação
         if not nave.pegou_item_pergunta:
-            aux1 = 0
-            aux2 = 0
+            aux_pontuacao_resposta = 0
+            aux_tempo_resposta = 0
             ti = 0
             tf = 0
         #Sistema de spawn de item de pergunta
@@ -196,8 +196,8 @@ def jogar(tela):
 
         #caixa de pergunta
         if nave.pegou_item_pergunta:
-            aux1 += 1
-            if aux1 == 1:
+            aux_pontuacao_resposta += 1
+            if aux_pontuacao_resposta == 1:
                 pontuacao.ganha += 100
                 ti = time.time()
             tela.WIN.blit(bg_pergunta, origem_plano_resposta)
@@ -226,8 +226,8 @@ def jogar(tela):
                 x = pos[0]
                 y += word_height
             if keys_teclado[pygame.K_a]:
-                aux2 += 1
-                if aux2 == 1:
+                aux_tempo_resposta += 1
+                if aux_tempo_resposta == 1:
                     tf = time.time()
                     t += tf - ti
                     pontuacao.ganha += 400
@@ -236,5 +236,5 @@ def jogar(tela):
                 nave.pegou_item_pergunta = False
             pygame.display.update()
         tela.desenhar(nave, elapsed_time,
-                        pontuacao, aux1, aux_inv, balas, itens_pergunta, obstaculos)
+                        pontuacao, aux_pontuacao_resposta, aux_inv, balas, itens_pergunta, obstaculos)
     return False
