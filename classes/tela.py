@@ -1,7 +1,9 @@
 import pygame
 import pygame_gui
+import math
 from .obstaculo import Obstaculo, Obstaculos
 from .item_pergunta import ItemPergunta
+from time import time
 
 
 class TelaJogo:
@@ -21,8 +23,11 @@ class TelaJogo:
         self.FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
         self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="botoes/configuracoes.json")
         self.criar_background()
+        self.tempo_inicio = time()
+        self.scroll = 0
+        self.tiles = math.ceil(self.WIDTH / self.BG.get_width()) + 1
 
-    def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, aux_inv, balas, itens_pergunta, obstaculos):
+    def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos):
         
         #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
         #WIN.blit(time_text, (10, 10))
@@ -36,9 +41,9 @@ class TelaJogo:
         #rotação da nave, carregamento da imagem na tela e piscadinha
         NAVE2 = pygame.transform.rotate(nave.gerar_imagem(), -nave.vel * 10)
         if nave.invencibilidade:
-            if str(aux_inv)[-2] in ["0", "2", "4", "6", "8"]:
+            if str(nave.aux_inv)[-2] in ["0", "2", "4", "6", "8"]:
                 NAVE2.set_alpha(0)
-            if str(aux_inv)[-2] in ["1", "3", "5", "7", "9"]:
+            if str(nave.aux_inv)[-2] in ["1", "3", "5", "7", "9"]:
                 NAVE2.set_alpha(1000)
         NAVE2_RECT = NAVE2.get_rect(center = (nave.x + 15, nave.y + 15))
         self.WIN.blit(NAVE2, (NAVE2_RECT))
@@ -60,7 +65,12 @@ class TelaJogo:
             self.WIN.blit(pygame.transform.rotozoom(pygame.image.load("imagens/shot.png"), 0, 3), (bala.x, bala.y))
         if not nave.pegou_item_pergunta:
             pygame.display.update()
-    
+    def loop(self):
+        for i in range(0, self.tiles):
+            self.WIN.blit(self.BG, (i * self.BG.get_width() + self.scroll, 0))
+        self.scroll -= 0.5
+        if abs(self.scroll) > self.BG.get_width():
+            self.scroll = 0
     @property
     def WIDTH(self):
         return self.WIN.get_width()

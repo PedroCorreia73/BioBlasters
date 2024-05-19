@@ -1,4 +1,6 @@
 import pygame
+import time
+from classes.jogo import Jogo
 
 class Nave(pygame.Rect):
 
@@ -6,8 +8,9 @@ class Nave(pygame.Rect):
         self.vel = 0
         self.WIDTH = 35
         self.HEIGHT = 35
-        self.hp = 100
+        self.hp = 20
         self.invencibilidade = False
+        self.aux_inv = 100
         self.colidiu_obstaculo = False
         self.pegou_item_pergunta = False
         self.mochila_balas = [1, 1]
@@ -17,3 +20,49 @@ class Nave(pygame.Rect):
         NAVE_imagem = pygame.image.load("imagens/sprites_ship.png")
         NAVE_imagem = pygame.transform.scale(NAVE_imagem, (self.WIDTH + 15, self.HEIGHT + 15))
         return NAVE_imagem
+    
+    def mover(self, tela, keys_mouse):
+        #--borda de cima--
+        if self.y <= 10:
+            if keys_mouse[0] or self.vel < 0:
+                self.vel = 0
+                self.y = 10
+            else:
+                self.vel += Jogo.GRAVIDADE
+        #--borda de baixo--
+        elif self.y + self.HEIGHT * 1.5 >= tela.HEIGHT:
+            if keys_mouse[0] and self.vel <= 0:
+                self.vel -= Jogo.GRAVIDADE
+            else:
+                self.vel = 0
+                self.y = tela.HEIGHT - self.HEIGHT * 1.2
+        #--entre as bordas--
+        elif keys_mouse[0] and self.y - self.vel >= 0:
+            if self.vel > -Jogo.VEL_TERMINAL:
+                self.vel -= Jogo.GRAVIDADE
+        else:
+            if self.vel < Jogo.VEL_TERMINAL:
+                self.vel += Jogo.GRAVIDADE
+        self.y += self.vel
+
+
+
+    def colidir(self, tela):
+        if self.colidiu_obstaculo:
+            if not self.invencibilidade:
+                self.hp -= 10
+                self.invencibilidade = True
+                self.t_invencibilidade = time.time() + 2
+            self.colidiu_obstaculo = False
+        if self.invencibilidade and time.time() > self.t_invencibilidade:
+            self.invencibilidade = False
+            self.aux_inv = 10
+        if self.invencibilidade:
+            self.aux_inv += 1
+        if self.hp <= 0:
+            lost_text = tela.FONT.render("Você perdeu!", 1, "blue")
+            tela.WIN.blit(lost_text, (tela.WIDTH / 2 - lost_text.get_width() / 2, tela.HEIGHT / 2 - lost_text.get_height() / 2))
+            pygame.display.update()
+            pygame.time.delay(1000)  # 1000 milisegundos
+            return False
+        return True

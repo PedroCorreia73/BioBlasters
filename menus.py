@@ -1,6 +1,6 @@
 import pygame
 import pygame_gui
-from jogar import jogar
+from tela_jogar import jogar
 
 
 class Menu:
@@ -13,16 +13,17 @@ class Menu:
         proporcao_x = tela.WIN.get_width() / 1920 # (1920 x 1080) tamanho padrão no qual as telas foram feitas
         proporcao_y = tela.WIN.get_height() / 1080
         tamanho_botao = (360 * proporcao_x , 85 * proporcao_y)
-        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((781 * proporcao_x, 429 * proporcao_y), tamanho_botao),
+        centralizar_x = 960 * proporcao_x - tamanho_botao[0] / 2
+        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((centralizar_x, 429 * proporcao_y), tamanho_botao),
                                              text='Jogar',
                                              manager=tela.manager)
-        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((781 * proporcao_x, 596 * proporcao_y), tamanho_botao),
+        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((centralizar_x, 596 * proporcao_y), tamanho_botao),
                                              text='Como Jogar',
                                              manager=tela.manager)
-        grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((781 * proporcao_x, 762 * proporcao_y), tamanho_botao),
+        grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((centralizar_x, 762 * proporcao_y), tamanho_botao),
                                              text='Grupo',
                                              manager=tela.manager)
-        ajustes_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((781 * proporcao_x, 929 * proporcao_y), tamanho_botao),
+        ajustes_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((centralizar_x, 929 * proporcao_y), tamanho_botao),
                                              text='Ajustes',
                                              manager=tela.manager)
         clock = pygame.time.Clock()
