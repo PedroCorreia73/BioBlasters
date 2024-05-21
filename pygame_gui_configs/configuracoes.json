@@ -1,0 +1,62 @@
+{
+    "button":
+    {
+        "colours":
+        {
+            "normal_border": "Black",
+            "normal_bg": "#5C5C5C",
+            "hovered_bg" : "#919191",
+            "hovered_border" : "LightBlue",
+            "normal_text": "#FFFFFF",
+            "hovered_text" :"#FFFFFF"
+        },
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "4"
+        },
+        "font":
+        {
+            "name" : "Press Start 2P",
+            "size" : 28,
+            "regular_resource" : 
+            {
+                "package" : "pygame_gui_configs",
+                "resource" : "PressStart2P-Regular.ttf"
+            }
+            
+
+        }
+    },
+    "text_entry_line":
+    {
+        "colours":
+        {
+            "normal_border": "Black",
+            "normal_bg": "#5C5C5C",
+            "hovered_bg" : "#919191",
+            "hovered_border" : "LightBlue",
+            "normal_text": "#FFFFFF",
+            "hovered_text" :"#FFFFFF"
+        },
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "4"
+        },
+        "font":
+        {
+            "name" : "Press Start 2P",
+            "size" : 28,
+            "regular_resource" : 
+            {
+                "package" : "pygame_gui_configs",
+                "resource" : "PressStart2P-Regular.ttf"
+            }
+            
+
+        }
+    }
+}

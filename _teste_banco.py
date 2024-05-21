@@ -1,5 +1,5 @@
-from aluno import AlunoDAO
-from grupo import GrupoDAO
+from banco_de_dados.aluno import AlunoDAO
+from banco_de_dados.grupo import GrupoDAO
 
 
 grupo = GrupoDAO("nome","senha")

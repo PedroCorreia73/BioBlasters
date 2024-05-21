@@ -1,13 +1,12 @@
 import pygame
 import pygame_gui
 import math
-from .obstaculo import Obstaculo, Obstaculos
-from .item_pergunta import ItemPergunta
+from classes.obstaculo import Obstaculo, Obstaculos
+from classes.item_pergunta import ItemPergunta
 from time import time
 
 
 class TelaJogo:
-
 
     def criar_background(self):
         BG = pygame.image.load("imagens/bg_start_v3.png").convert_alpha()
@@ -21,11 +20,16 @@ class TelaJogo:
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("BioBlasters")
         self.FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
-        self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="botoes/configuracoes.json")
+        self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="pygame_gui_configs/configuracoes.json")
         self.criar_background()
         self.tempo_inicio = time()
         self.scroll = 0
         self.tiles = math.ceil(self.WIDTH / self.BG.get_width()) + 1
+        self.proporcao_x = self.WIN.get_width() / 1920 # (1920 x 1080) tamanho padrão no qual as telas foram feitas
+        self.proporcao_y = self.WIN.get_height() / 1080
+        self.tamanho_botao = (360 * self.proporcao_x , 85 * self.proporcao_y)
+        self.centralizar_x = 960 * self.proporcao_x - self.tamanho_botao[0] / 2
+
 
     def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos):
         
@@ -65,6 +69,7 @@ class TelaJogo:
             self.WIN.blit(pygame.transform.rotozoom(pygame.image.load("imagens/shot.png"), 0, 3), (bala.x, bala.y))
         if not nave.pegou_item_pergunta:
             pygame.display.update()
+            
     def loop(self):
         for i in range(0, self.tiles):
             self.WIN.blit(self.BG, (i * self.BG.get_width() + self.scroll, 0))

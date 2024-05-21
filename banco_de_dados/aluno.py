@@ -1,4 +1,4 @@
-from conexao_banco_de_dados import Conexao
+from banco_de_dados.conexao_banco_de_dados import Conexao
 
 class AlunoDAO:
     def __init__(self, nome_aluno, senha_aluno, id_grupo):
