@@ -3,7 +3,7 @@ from banco_de_dados.conexao_banco_de_dados import Conexao
 class ProfessorDAO:
     @Conexao.consultar
     def ver_professores(cls):
-        obter_perguntas = "SELECT * FROM professor"
+        obter_perguntas = "SELECT * FROM Professor"
         cls.consulta.execute(obter_perguntas)
         resultado = cls.consulta.fetchall()
         return resultado

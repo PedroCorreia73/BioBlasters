@@ -1,8 +1,8 @@
 class Usuario:
     def __init__(self):
-        self._nome_usuario = ""
-        self._senha_usuario = ""
-        self._id_usuario = -1
+        self._nome_usuario = None
+        self._senha_usuario = None
+        self._id_grupo = None
     @property
     def nome(self):
         return self._nome_usuario
@@ -16,11 +16,11 @@ class Usuario:
     def senha(self, senha_usuario):
         self._senha_usuario = senha_usuario 
     @property
-    def id_usuario(self):
-        return self._id_usuario
-    @id_usuario.setter
-    def id_usuario(self, novo_id):
-        self._id_usuario = novo_id
+    def id_grupo(self):
+        return self._id_grupo
+    @id_grupo.setter
+    def id_grupo(self, novo_id):
+        self._id_grupo = novo_id
 
 
 class Aluno(Usuario):

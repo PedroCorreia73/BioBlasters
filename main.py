@@ -13,13 +13,14 @@ def main():
         repetir = TelaLogin.login(tela, usuario)
 
     continuar = True
+    menu = Menu()
     while continuar:
         if isinstance(usuario, Aluno): 
-            continuar = Menu.menu_aluno(tela)
+            continuar = menu.aluno(tela, usuario)
         elif isinstance(usuario, Professor):
-            continuar = Menu.menu_professor(tela)
+            continuar = menu.professor(tela, usuario)
         elif isinstance(usuario, Administrador):
-            continuar = Menu.menu_administrador(tela)
+            continuar = menu.administrador(tela, usuario)
     pygame.quit
 
 if __name__ == "__main__":

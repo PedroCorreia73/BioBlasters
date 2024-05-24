@@ -11,6 +11,7 @@ from classes.jogo import Jogo
 class TelaJogar():
     def jogar(tela):
         tela.manager.clear_and_reset() # Reseta os elementos do pygame_gui
+        tela.tempo_inicio = time.time()
         nave = Nave() # Iniciando a nave do jogador
         pontuacao = Pontuacao() #Iniciando a pontuação 
         obstaculos = Obstaculos() #Iniciando coleção de obstáculos que aparecem na tela

@@ -14,7 +14,6 @@ class TelaLogin:
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
         pygame.display.update()
-        #iniciar_imagem = pygame.image.load("imagens/start.png")
         tamanho_texto = (800 * tela.proporcao_x, 85 * tela.proporcao_y)
         usuario_texto = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(relative_rect=pygame.Rect((960 * tela.proporcao_x - tamanho_texto[0] / 2, 429 * tela.proporcao_y), tamanho_texto),
                                             placeholder_text = "Usuário",                                    
@@ -28,6 +27,7 @@ class TelaLogin:
         entrar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x, 762 * tela.proporcao_y), tela.tamanho_botao),
                                              text='Entrar',
                                              manager=tela.manager)
+        senha_texto.set_text_hidden(is_hidden=True)
         clock = pygame.time.Clock()
         run = True
         while run:

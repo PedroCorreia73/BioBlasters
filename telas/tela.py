@@ -28,7 +28,6 @@ class TelaJogo:
         self.proporcao_x = self.WIN.get_width() / 1920 # (1920 x 1080) tamanho padrão no qual as telas foram feitas
         self.proporcao_y = self.WIN.get_height() / 1080
         self.tamanho_botao = (360 * self.proporcao_x , 85 * self.proporcao_y)
-        self.centralizar_x = 960 * self.proporcao_x - self.tamanho_botao[0] / 2
 
 
     def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos):
