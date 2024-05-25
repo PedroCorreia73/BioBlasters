@@ -24,12 +24,22 @@ class AlunoDAO:
         aluno._id_aluno = cls.consulta.lastrowid
         return None
 
+    @classmethod
+    @Conexao.consultar
+    def consulta_aluno(cls, args):
+        aluno = args[0]
+        consulta_aluno = "SELECT * FROM Aluno WHERE usuario_aluno = %s"
+        valores = (aluno._usuario_aluno,)
+        cls.consulta.execute(consulta_aluno, valores)
+        resultado = cls.consulta.fetchall()
+        return resultado
+        
 
     @property
     def id(self):
         return self._id_aluno
     @property
-    def nome(self):
+    def usuario(self):
         return self._usuario_aluno
     @property
     def senha(self):

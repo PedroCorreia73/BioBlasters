@@ -7,9 +7,9 @@ from banco_de_dados.professor import ProfessorDAO
 from banco_de_dados.administrador import AdministradorDAO
 from usuario.usuario_atual import Aluno, Professor, Administrador
 
-class TelaLogin:
+class TelaAutenticacao:
     @classmethod
-    def login(cls,tela, usuario):
+    def autenticar(cls,tela, usuario):
         tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
@@ -48,17 +48,15 @@ class TelaLogin:
                         senha_usuario = senha_texto.get_text()
                         if isinstance(usuario, Aluno):
                             if cls.verificar_email_aluno(nome_usuario):
-                                aluno = AlunoDAO(nome_usuario, senha_usuario, -1)
-                                try:
+                                aluno = AlunoDAO(nome_usuario, senha_usuario, None)
+                                verificar = AlunoDAO.consulta_aluno(aluno)
+                                if len(verificar) == 0:
                                     AlunoDAO.adicionar_aluno(aluno)
-                                except mysql.connector.IntegrityError as err:
-                                    print("O email ja existe")
-                                    print("Erro: {}".format(err))
-                                finally:
+                                else:
                                     pass
                         elif isinstance(usuario, Professor):
                             if cls.verificar_email_professor(nome_usuario):
-                                professor = ProfessorDAO(nome_usuario, senha_usuario, -1)
+                                professor = ProfessorDAO(nome_usuario, senha_usuario, None)
                                 ProfessorDAO.adicionar_professor(professor)
                 tela.manager.process_events(event)
             tela.manager.update(time_delta)
