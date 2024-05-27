@@ -1,8 +1,15 @@
 class Usuario:
     def __init__(self):
+        self._id_usuario = None
         self._nome_usuario = None
         self._senha_usuario = None
 
+    @property
+    def id(self):
+        return self._id_usuario
+    @id.setter
+    def id(self, novo_id):
+        self._id_usuario = novo_id
     @property
     def nome(self):
         return self._nome_usuario

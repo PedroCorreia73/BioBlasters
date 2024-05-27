@@ -27,13 +27,25 @@ class GrupoDAO:
     @classmethod
     @Conexao.consultar
     def procurar_grupo(cls, args):
-        codigo_grupo = args[0]
-        procurar = "SELECT * FROM Grupo WHERE codigo_grupo = %s"
-        valores = (codigo_grupo,)
+        grupo = args[0]
+        nome_grupo = grupo._nome_grupo
+        codigo_grupo = grupo._codigo_grupo
+        procurar = "SELECT * FROM Grupo WHERE codigo_grupo = %s OR nome_grupo = %s"
+        valores = (codigo_grupo, nome_grupo)
         cls.consulta.execute(procurar, valores)
         resultado = cls.consulta.fetchall()
         return resultado
-
+    
+    @classmethod
+    @Conexao.consultar
+    def procurar_grupo_por_codigo(cls, args):
+        codigo = args[0]
+        procurar = "SELECT * FROM Grupo WHERE codigo_grupo = %s"
+        valores = (codigo,)
+        cls.consulta.execute(procurar, valores)
+        resultado = cls.consulta.fetchall()
+        return resultado
+    
 
     @property
     def id(self):

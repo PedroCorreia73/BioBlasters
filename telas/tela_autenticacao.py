@@ -12,30 +12,35 @@ class TelaAutenticacao:
     def autenticar(cls,tela, usuario):
         tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
-        tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
         pygame.display.update()
         tamanho_texto = (800 * tela.proporcao_x, 85 * tela.proporcao_y)
-        usuario_texto = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(relative_rect=pygame.Rect((960 * tela.proporcao_x - tamanho_texto[0] / 2, 429 * tela.proporcao_y), tamanho_texto),
+        usuario_texto = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(relative_rect=pygame.Rect((0 * tela.proporcao_x, 429 * tela.proporcao_y), tamanho_texto),
                                             placeholder_text = "Usuário",                                    
-                                            manager = tela.manager)
-        senha_texto = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(relative_rect=pygame.Rect((960 * tela.proporcao_x - tamanho_texto[0] / 2, 596 * tela.proporcao_y), tamanho_texto),
+                                            manager = tela.manager,
+                                            anchors={"centerx":"centerx"})
+        senha_texto = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(relative_rect=pygame.Rect((0 * tela.proporcao_x , 596 * tela.proporcao_y), tamanho_texto),
                                             placeholder_text = "Senha",                                    
-                                            manager = tela.manager)
+                                            manager = tela.manager,
+                                            anchors={"centerx":"centerx"})
         cadastrar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x - tela.tamanho_botao[0] , 762 * tela.proporcao_y), tela.tamanho_botao),
                                              text='Cadastrar',
                                              manager=tela.manager)
         entrar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x, 762 * tela.proporcao_y), tela.tamanho_botao),
                                              text='Entrar',
                                              manager=tela.manager)
-        senha_texto.set_text_hidden(is_hidden=True)
         clock = pygame.time.Clock()
         run = True
         while run:
             time_delta = clock.tick(60) / 1000.00
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
                     return False
+                if event.type == pygame_gui.UI_TEXT_ENTRY_CHANGED:
+                    if event.ui_element == senha_texto:
+                        if senha_texto.get_text() == "":
+                            senha_texto.set_text_hidden(is_hidden=False)
+                        else:
+                            senha_texto.set_text_hidden(is_hidden=True)
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == entrar_botao:
                         run = False
@@ -53,13 +58,26 @@ class TelaAutenticacao:
                                 if len(verificar) == 0:
                                     AlunoDAO.adicionar_aluno(aluno)
                                 else:
-                                    pass
+                                    usuario_texto.set_text("")
+                                    senha_texto.set_text("")
+                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                         manager=tela.manager,
+                                                                                         html_message="<p>Usuário já cadastrado!</p>")
+                            else:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                        manager=tela.manager,
+                                                                                        html_message='<p>O email deve possuir "@jpiaget.g12.br"</p>')
                         elif isinstance(usuario, Professor):
                             if cls.verificar_email_professor(nome_usuario):
                                 professor = ProfessorDAO(nome_usuario, senha_usuario, None)
                                 ProfessorDAO.adicionar_professor(professor)
+                            else:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                        manager=tela.manager,
+                                                                                        html_message='<p>O email deve possuir "@jpiaget.pro.br"</p>')
                 tela.manager.process_events(event)
             tela.manager.update(time_delta)
+            tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
             tela.manager.draw_ui(tela.WIN)
             pygame.display.flip()
 
@@ -90,3 +108,4 @@ class TelaAutenticacao:
                 return True
             else:
                 return False
+

@@ -15,12 +15,12 @@ class TelaJogo:
     def __init__(self):
         pygame.font.init() #inicializar o font module (sem isso não dá para usar fontes)
         pygame.display.init() # inicializar a tela (serve para poder obter as medidas da tela do usuário)
-        WIDTH, HEIGHT = pygame.display.get_desktop_sizes()[0] #obtém as medidas da tela do usuário
+        self.WIDTH, self.HEIGHT = pygame.display.get_desktop_sizes()[0] #obtém as medidas da tela do usuário
         # WIDTH, HEIGHT = 1200, 600
-        self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.WIN = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         pygame.display.set_caption("BioBlasters")
         self.FONT = pygame.font.SysFont("comicsans", 30) #tipo e tamanho da fonte estocada na variável FONT
-        self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="pygame_gui_configs/configuracoes.json")
+        self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path="pygame_gui_configs/configuracoes.json",enable_live_theme_updates=False)
         self.criar_background()
         self.tempo_inicio = time()
         self.scroll = 0
@@ -75,9 +75,3 @@ class TelaJogo:
         self.scroll -= 0.5
         if abs(self.scroll) > self.BG.get_width():
             self.scroll = 0
-    @property
-    def WIDTH(self):
-        return self.WIN.get_width()
-    @property
-    def HEIGHT(self):
-        return self.WIN.get_height()

@@ -33,6 +33,17 @@ class AlunoDAO:
         cls.consulta.execute(consulta_aluno, valores)
         resultado = cls.consulta.fetchall()
         return resultado
+    
+    @classmethod
+    @Conexao.consultar
+    def vincular_grupo(cls,args):
+        aluno = args[0]
+        id_grupo = aluno.id_grupo
+        id_aluno = aluno.id
+        vincular_grupo = "UPDATE Aluno SET idGrupo = %s WHERE idAluno = %s"
+        valores = (id_grupo, id_aluno)
+        cls.consulta.execute(vincular_grupo, valores)
+        return None
         
 
     @property

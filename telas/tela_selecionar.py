@@ -6,7 +6,6 @@ class TelaSelecionar:
     def selecionar(tela):
         tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
-        tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
         pygame.display.update()
         aluno_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x - tela.tamanho_botao[0] , 500 * tela.proporcao_y), tela.tamanho_botao),
                                              text='Aluno',
@@ -33,5 +32,6 @@ class TelaSelecionar:
                         return Administrador()
                 tela.manager.process_events(event)
             tela.manager.update(time_delta)
+            tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
             tela.manager.draw_ui(tela.WIN)
             pygame.display.flip()
