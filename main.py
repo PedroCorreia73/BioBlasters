@@ -3,7 +3,6 @@ from telas.tela import TelaJogo
 from telas.menus import Menu
 from telas.tela_autenticacao import TelaAutenticacao
 from telas.tela_selecionar import TelaSelecionar
-from usuario.usuario_atual import Aluno, Professor, Administrador
 
 def main():
     tela = TelaJogo() # inicializa a tela com as medidas da tela do usuário

@@ -45,7 +45,6 @@ class AlunoDAO:
         cls.consulta.execute(vincular_grupo, valores)
         return None
         
-
     @property
     def id(self):
         return self._id_aluno
