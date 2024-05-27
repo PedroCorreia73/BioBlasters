@@ -13,14 +13,9 @@ def main():
         repetir = TelaAutenticacao.autenticar(tela, usuario)
 
     continuar = True
-    menu = Menu()
+    menu = Menu(tela)
     while continuar:
-        if isinstance(usuario, Aluno): 
-            continuar = menu.aluno(tela, usuario)
-        elif isinstance(usuario, Professor):
-            continuar = menu.professor(tela, usuario)
-        elif isinstance(usuario, Administrador):
-            continuar = menu.administrador(tela, usuario)
+        continuar = usuario.entrar_menu(menu)
     pygame.quit
 if __name__ == "__main__":
     main()

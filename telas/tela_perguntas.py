@@ -2,7 +2,6 @@ import pygame
 import pygame_gui
 import pygame_gui.elements.ui_panel
 from pygame_gui.core import ObjectID
-from telas.tela import TelaJogo
 
 class TelaPerguntas:
     def __init__(self, tela):

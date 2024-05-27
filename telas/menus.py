@@ -7,25 +7,28 @@ from telas.tela_ajustes import TelaAjustes
 
 
 class Menu:
-    def aluno(self, tela, usuario):
-        tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
+    def __init__(self, tela):
+        self.tela = tela
+
+    def aluno(self, usuario):
+        self.tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         pygame.display.update()
-        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 429 * tela.proporcao_y), tela.tamanho_botao),
+        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 429 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Jogar',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 596 * tela.proporcao_y), tela.tamanho_botao),
+        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 596 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Como Jogar',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 762 * tela.proporcao_y), tela.tamanho_botao),
+        grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 762 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Grupo',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        ajustes_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 929 * tela.proporcao_y), tela.tamanho_botao),
+        ajustes_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 929 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Ajustes',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
         clock = pygame.time.Clock()
         run = True
@@ -37,46 +40,46 @@ class Menu:
                     run = False
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == jogar_botao:
-                        repetir = TelaJogar.jogar(tela)
+                        repetir = TelaJogar.jogar(self.tela)
                         return repetir
                     elif event.ui_element == grupo_botao:
-                        tela_grupo = TelaGrupo(tela)
+                        tela_grupo = TelaGrupo(self.tela)
                         repetir = tela_grupo.entrar_grupo(usuario)
                         return repetir
                     elif event.ui_element == ajustes_botao:
-                        tela_ajustes = TelaAjustes(tela)
+                        tela_ajustes = TelaAjustes(self.tela)
                         repetir = tela_ajustes.ajustes()
                         return repetir
-                tela.manager.process_events(event)
-            tela.manager.update(time_delta)
-            tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
-            tela.manager.draw_ui(tela.WIN)
+                self.tela.manager.process_events(event)
+            self.tela.manager.update(time_delta)
+            self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
+            self.tela.manager.draw_ui(self.tela.WIN)
             pygame.display.flip()
         return False
 
-    def professor(self, tela, usuario):
-        tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
+    def professor(self, usuario):
+        self.tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         pygame.display.update()
-        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 403 * tela.proporcao_y), tela.tamanho_botao),
+        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 403 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Jogar',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 553 * tela.proporcao_y), tela.tamanho_botao),
+        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 553 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Como Jogar',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 693 * tela.proporcao_y), tela.tamanho_botao),
+        grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 693 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Grupo',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        ajustes_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 834 * tela.proporcao_y), tela.tamanho_botao),
+        ajustes_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 834 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Ajustes',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        perguntas_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0 * tela.proporcao_x, 974 * tela.proporcao_y), tela.tamanho_botao),
+        perguntas_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0 * self.tela.proporcao_x, 974 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Perguntas',
-                                             manager=tela.manager,
+                                             manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
         clock = pygame.time.Clock()
         run = True
@@ -87,25 +90,25 @@ class Menu:
                     run = False
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == jogar_botao:
-                        repetir = TelaJogar.jogar(tela)
+                        repetir = TelaJogar.jogar(self.tela)
                         return repetir
                     elif event.ui_element == grupo_botao:
-                        tela_grupo = TelaGrupo(tela)
+                        tela_grupo = TelaGrupo(self.tela)
                         repetir = tela_grupo.criar_grupo(usuario)
                         return repetir
                     elif event.ui_element == ajustes_botao:
-                        tela_ajustes = TelaAjustes(tela)
+                        tela_ajustes = TelaAjustes(self.tela)
                         repetir = tela_ajustes.ajustes()
                         return repetir
                     elif event.ui_element == perguntas_botao:
-                        tela_perguntas = TelaPerguntas(tela)
+                        tela_perguntas = TelaPerguntas(self.tela)
                         repetir = tela_perguntas.mostrar_perguntas(usuario)
                         return repetir
-                tela.manager.process_events(event)
-            tela.manager.update(time_delta)
-            tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
-            tela.manager.draw_ui(tela.WIN)
+                self.tela.manager.process_events(event)
+            self.tela.manager.update(time_delta)
+            self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
+            self.tela.manager.draw_ui(self.tela.WIN)
             pygame.display.flip()
         return False
-    def administrador(tela):
+    def administrador(self, usuario):
         pass
