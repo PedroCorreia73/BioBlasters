@@ -32,5 +32,9 @@ class Balas(ColecaoItens):
     def colidir(self, obstaculos):
         for bala in self.itens():
             for obstaculo in obstaculos.itens():
-                if bala.y in range(obstaculo.y - 15, obstaculo.y + Obstaculo.HEIGHT + 5) and bala.x in range(obstaculo.x - 5, obstaculo.x + Obstaculo.WIDTH):
-                    obstaculos.remove(obstaculo)
+                if obstaculo.tipo == 1:
+                    if bala.y in range(obstaculo.y - 15, obstaculo.y + Obstaculo.HEIGHT1 + 5) and bala.x in range(obstaculo.x - 5, obstaculo.x + Obstaculo.WIDTH):
+                        obstaculos.remove(obstaculo)
+                else:
+                    if bala.y in range(obstaculo.y - 15, obstaculo.y + Obstaculo.HEIGHT2 + 5) and bala.x in range(obstaculo.x - 5, obstaculo.x + Obstaculo.WIDTH):
+                        obstaculos.remove(obstaculo)
