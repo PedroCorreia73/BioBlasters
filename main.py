@@ -9,12 +9,16 @@ def main():
     repetir = True
     while repetir:
         usuario = TelaSelecionar.selecionar(tela)
+        if usuario == None:
+            break
         repetir = TelaAutenticacao.autenticar(tela, usuario)
 
     continuar = True
     menu = Menu(tela)
-    while continuar:
-        continuar = usuario.entrar_menu(menu)
+    if usuario != None:
+        if usuario.nome != None:
+            while continuar:
+                continuar = usuario.entrar_menu(menu)
     pygame.quit
 if __name__ == "__main__":
     main()

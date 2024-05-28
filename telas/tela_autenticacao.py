@@ -50,11 +50,13 @@ class TelaAutenticacao:
                                 verificar = AlunoDAO.consulta_aluno(aluno)
                                 if len(verificar) == 1:
                                     if senha_usuario == verificar[0][2]:
+                                        usuario.id = verificar[0][0]
                                         usuario.nome = nome_usuario
                                         usuario.senha = senha_usuario
                                         return False
                                     else:
                                         senha_texto.set_text("")
+                                        senha_texto.set_text_hidden(is_hidden=False)
                                         pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
                                                                                         manager=tela.manager,
                                                                                          html_message="<p>Senha incorreta</p>")
@@ -66,7 +68,49 @@ class TelaAutenticacao:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
                                                                                         manager=tela.manager,
                                                                                         html_message='<p>O email deve possuir "@jpiaget.g12.br"</p>')
-                                
+                        elif isinstance(usuario, Professor):
+                            if cls.verificar_email_professor(nome_usuario):
+                                professor = ProfessorDAO(nome_usuario, senha_usuario, None)
+                                verificar = ProfessorDAO.consulta_professor(professor)
+                                if len(verificar) == 1:
+                                    if senha_usuario == verificar[0][2]:
+                                        usuario.id = verificar[0][0]
+                                        usuario.nome = nome_usuario
+                                        usuario.senha = senha_usuario
+                                        return False
+                                    else:
+                                        senha_texto.set_text("")
+                                        senha_texto.set_text_hidden(is_hidden=False)
+                                        pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                        manager=tela.manager,
+                                                                                         html_message="<p>Senha incorreta</p>")
+                                else:
+                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                        manager=tela.manager,
+                                                                                        html_message="<p>Usuário não encontrado</p>")
+                            else:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                        manager=tela.manager,
+                                                                                        html_message='<p>O email deve possuir "@jpiaget.pro.br"</p>')
+                        elif isinstance(usuario,Administrador):
+                            administrador = AdministradorDAO(nome_usuario,senha_usuario)
+                            verificar = AdministradorDAO.consulta_administrador(administrador)
+                            if len(verificar) == 1:
+                                if senha_usuario == verificar[0][2]:
+                                    usuario.id = verificar[0][0]
+                                    usuario.nome = nome_usuario
+                                    usuario.senha = senha_usuario
+                                    return False
+                                else:
+                                    senha_texto.set_text("")
+                                    senha_texto.set_text_hidden(is_hidden=False)
+                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                    manager=tela.manager,
+                                                                                        html_message="<p>Senha incorreta</p>")
+                            else:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
+                                                                                    manager=tela.manager,
+                                                                                    html_message="<p>Usuário não encontrado</p>")
                     elif event.ui_element == cadastrar_botao:
                         nome_usuario = usuario_texto.get_text()
                         senha_usuario = senha_texto.get_text()
@@ -82,6 +126,7 @@ class TelaAutenticacao:
                                 else:
                                     usuario_texto.set_text("")
                                     senha_texto.set_text("")
+                                    senha_texto.set_text_hidden(is_hidden=False)
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
                                                                                          manager=tela.manager,
                                                                                          html_message="<p>Usuário já cadastrado!</p>")
@@ -92,7 +137,7 @@ class TelaAutenticacao:
                         elif isinstance(usuario, Professor):
                             if cls.verificar_email_professor(nome_usuario):
                                 professor = ProfessorDAO(nome_usuario, senha_usuario, None)
-                                verificar = AlunoDAO.consulta_aluno(professor)
+                                verificar = ProfessorDAO.consulta_professor(professor)
                                 if len(verificar) == 0:
                                     ProfessorDAO.adicionar_professor(professor)
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
@@ -101,6 +146,7 @@ class TelaAutenticacao:
                                 else:
                                     usuario_texto.set_text("")
                                     senha_usuario.set_text("")
+                                    senha_texto.set_text_hidden(is_hidden=False)
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),
                                                                                          manager=tela.manager,
                                                                                          html_message="<p>Usuário já cadastrado!</p>")

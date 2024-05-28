@@ -87,7 +87,7 @@ class TelaGrupo:
                     if event.ui_element == criar_grupo_botao:
                         nome = nome_grupo_texto.get_text()
                         codigo = codigo_grupo_texto.get_text()
-                        if codigo != None and nome != None:
+                        if codigo != "" and nome != "":
                             grupo = GrupoDAO(nome, codigo)
                             verificar = GrupoDAO.procurar_grupo(grupo)
                             if len(verificar) == 0:
@@ -106,7 +106,10 @@ class TelaGrupo:
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>O código de grupo: {codigo} já está em uso</p>')
-
+                        else:
+                             pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                        manager=self.tela.manager,
+                                                                                        html_message=f'<p>Preencha os campos de nome e código do grupo</p>')
                     elif event.ui_element == voltar_botao:
                         return True
                 self.tela.manager.process_events(event)

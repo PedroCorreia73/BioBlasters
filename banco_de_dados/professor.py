@@ -18,8 +18,8 @@ class ProfessorDAO:
     @Conexao.consultar
     def adicionar_professor(cls, args):
         professor = args[0]
-        adicionar_professor = "INSERT INTO Professor(usuario_professor, senha_professor, idGrupo)"
-        valores = (professor._usuario_professor, professor.senha_professor, professor._id_grupo)
+        adicionar_professor = "INSERT INTO Professor(usuario_professor, senha_professor, idGrupo) VALUES(%s,%s,%s)"
+        valores = (professor._usuario_professor, professor._senha_professor, professor._id_grupo)
         cls.consulta.execute(adicionar_professor, valores)
         professor._id_professor = cls.consulta.lastrowid
         return None
@@ -34,6 +34,16 @@ class ProfessorDAO:
         valores = (id_grupo, id_professor)
         cls.consulta.execute(vincular_grupo, valores)
         return None
+    
+    @classmethod
+    @Conexao.consultar
+    def consulta_professor(cls,args):
+        professor = args[0]
+        consultar_professor = "SELECT * FROM Professor WHERE usuario_professor = %s"
+        valores = (professor._usuario_professor,)
+        cls.consulta.execute(consultar_professor, valores)
+        resultado = cls.consulta.fetchall()
+        return resultado
     
     @property
     def id(self):
