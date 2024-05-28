@@ -12,15 +12,30 @@ class TelaPerguntas:
         pygame.display.update()
         tamanho_botao = self.tela.tamanho_botao
         caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((296 * self.tela.proporcao_x, 415 * self.tela.proporcao_y),(1292 * self.tela.proporcao_x, 647 * self.tela.proporcao_y)),
-                                             manager=self.tela.manager)
-        usuario_texto = pygame_gui.elements.ui_text_entry_line.UITextEntryLine(relative_rect=pygame.Rect((368.83 * self.tela.proporcao_x , 453.23 * self.tela.proporcao_y), tamanho_botao),
-                                            placeholder_text = "Usuário", 
-                                            container =caixa_fundo,                                   
-                                            manager = self.tela.manager)
-        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((300 * self.tela.proporcao_x, 460.58 * self.tela.proporcao_y), (83.92 * self.tela.proporcao_x, 48.53 * self.tela.proporcao_y)),
+                                                  manager=self.tela.manager)
+        perguntas= pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((0, 0),(1163.75 * self.tela.proporcao_x, 400 * self.tela.proporcao_y)),
+                                                            item_list=["Perguntas",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta",
+                                                                       "Pergunta"],
+                                                            container=caixa_fundo,
+                                                            anchors={"centerx":"centerx",
+                                                                    "centery":"centery"},
+                                                            manager=self.tela.manager)
+        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((144 * self.tela.proporcao_x, 45.58 * self.tela.proporcao_y), (86 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
                                                     text="",
                                                     container=caixa_fundo,
-                                                    object_id=ObjectID(class_id="@botao_voltar"),
+                                                    object_id=ObjectID(class_id="@botao_voltar_pequeno"),
                                                     manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True
