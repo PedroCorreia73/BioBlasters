@@ -1,138 +1,171 @@
 {
-    "button":
-    {
-        "colours":
-        {
+    "button": {
+        "colours": {
             "normal_border": "Black",
             "normal_bg": "#5C5C5C",
-            "hovered_bg" : "#919191",
-            "hovered_border" : "LightBlue",
+            "hovered_bg": "#919191",
+            "hovered_border": "LightBlue",
             "normal_text": "#FFFFFF",
-            "hovered_text" :"#FFFFFF"
+            "hovered_text": "#FFFFFF"
         },
-        "misc":
-        {
+        "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "10",
             "border_width": "4"
         },
-        "font":
-        {
-            "name" : "Press Start 2P",
-            "size" : 28,
-            "regular_resource" : 
-            {
-                "package" : "pygame_gui_configs",
-                "resource" : "PressStart2P-Regular.ttf"
+        "font": {
+            "name": "Press Start 2P",
+            "size": 28,
+            "regular_resource": {
+                "package": "pygame_gui_configs",
+                "resource": "PressStart2P-Regular.ttf"
             }
-            
-
         }
     },
-    "text_entry_line":
-    {
-        "colours":
-        {
+    "label": {
+        "colours": {
+            "dark_bg": "#00000000",
+            "normal_text": "#FFFFFF"
+        },
+        "font": {
+            "name": "Press Start 2P",
+            "size": 20,
+            "regular_resource": {
+                "package": "pygame_gui_configs",
+                "resource": "PressStart2P-Regular.ttf"
+            }
+        },
+        "misc": {
+            "text_shadow": "1",
+            "text_shadow_size": "1",
+            "text_shadow_offset": "0,0"
+        }
+    },
+    "text_entry_line": {
+        "colours": {
             "normal_border": "Black",
             "normal_bg": "#5C5C5C",
-            "hovered_bg" : "#919191",
-            "hovered_border" : "LightBlue",
+            "hovered_bg": "#919191",
+            "hovered_border": "LightBlue",
             "normal_text": "#FFFFFF",
-            "hovered_text" :"#FFFFFF"
+            "hovered_text": "#FFFFFF"
         },
-        "misc":
-        {
+        "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "10",
             "border_width": "4"
         },
-        "font":
-        {
-            "name" : "Press Start 2P",
-            "size" : 28,
-            "regular_resource" : 
-            {
-                "package" : "pygame_gui_configs",
-                "resource" : "PressStart2P-Regular.ttf"
+        "font": {
+            "name": "Press Start 2P",
+            "size": 28,
+            "regular_resource": {
+                "package": "pygame_gui_configs",
+                "resource": "PressStart2P-Regular.ttf"
             }
-            
-
         }
     },
-    "panel":
-    {
-        "colours":
-        {
-            "dark_bg":"#5C5C5C",
+    "panel": {
+        "colours": {
+            "dark_bg": "#5C5C5C",
             "normal_border": "#D9D9D9"
         },
-        "misc":
-        {
+        "misc": {
             "shape": "rectangle",
             "border_width": "13",
             "shadow_width": "10"
         }
     },
-    "message_window":
-    {
-        "title_bar":
-        {
-            "font":
-            {
-                "name" : "Press Start 2P",
-                "size" : 24,
-                "regular_resource" : 
-                {
-                    "package" : "pygame_gui_configs",
-                    "resource" : "PressStart2P-Regular.ttf"
+    "selection_list": {
+        "colours": {
+            "dark_bg": "#21282D",
+            "normal_border": "#999999"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "border_width": "1",
+            "shadow_width": "1",
+            "list_item_height": "35"
+        }
+    },
+    "selection_list.@selection_list_item": {
+        "misc": {
+            "border_width": "3",
+            "text_horiz_alignment": "left"
+        }
+    },
+    "message_window": {
+        "title_bar": {
+            "font": {
+                "name": "Press Start 2P",
+                "size": 24,
+                "regular_resource": {
+                    "package": "pygame_gui_configs",
+                    "resource": "PressStart2P-Regular.ttf"
                 }
             }
         },
-        "dismiss_button":
-        {
-            "font":
-            {
-                "name" : "Press Start 2P",
-                "size" : 20,
-                "regular_resource" : 
-                {
-                    "package" : "pygame_gui_configs",
-                    "resource" : "PressStart2P-Regular.ttf"
+        "dismiss_button": {
+            "font": {
+                "name": "Press Start 2P",
+                "size": 20,
+                "regular_resource": {
+                    "package": "pygame_gui_configs",
+                    "resource": "PressStart2P-Regular.ttf"
                 }
-                
-
             }
         }
     },
-    "@botao_voltar":
-    {
-        "colours":
-        {
-            "normal_bg":"#00000000",
-            "hovered_bg":"#00000000",
-            "disabled_bg":"#00000000",
-            "selected_bg":"#00000000",
-            "active_bg":"#00000000",
-            "dark_bg":"#00000000",
-            "normal_text":"#00000000",
-            "hovered_text":"#00000000",
-            "selected_text":"#00000000",
-            "disabled_text":"#00000000",
-            "active_text":"#00000000",
+    "@botao_voltar": {
+        "colours": {
+            "normal_bg": "#00000000",
+            "hovered_bg": "#00000000",
+            "disabled_bg": "#00000000",
+            "selected_bg": "#00000000",
+            "active_bg": "#00000000",
+            "dark_bg": "#00000000",
+            "normal_text": "#00000000",
+            "hovered_text": "#00000000",
+            "selected_text": "#00000000",
+            "disabled_text": "#00000000",
+            "active_text": "#00000000",
             "normal_border": "#00000000",
             "hovered_border": "#00000000",
             "disabled_border": "#00000000",
             "selected_border": "#00000000",
             "active_border": "#00000000"
         },
-        "images":
-        {
-            "normal_image":
-            {
+        "images": {
+            "normal_image": {
                 "package": "imagens",
                 "resource": "botao_voltar.png"
             }
         }
+    },
+    "@botao_voltar_pequeno": {
+        "colours": {
+            "normal_bg": "#00000000",
+            "hovered_bg": "#00000000",
+            "disabled_bg": "#00000000",
+            "selected_bg": "#00000000",
+            "active_bg": "#00000000",
+            "dark_bg": "#00000000",
+            "normal_text": "#00000000",
+            "hovered_text": "#00000000",
+            "selected_text": "#00000000",
+            "disabled_text": "#00000000",
+            "active_text": "#00000000",
+            "normal_border": "#00000000",
+            "hovered_border": "#00000000",
+            "disabled_border": "#00000000",
+            "selected_border": "#00000000",
+            "active_border": "#00000000"
+        },
+        "images": {
+            "normal_image": {
+                "package": "imagens",
+                "resource": "botao_voltar_pequeno.png"
+            }
+        }
     }
-
 }

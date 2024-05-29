@@ -13,7 +13,7 @@ class Conexao:
 
     def consultar(func):
         """Todas as funções que utilizam uma conexão com o banco de dados devem ter essa função como decorator.
-        @consultar é responsável por abrir e fechar uma pool de conexão com o banco de dados."""
+        @consultar é responsável por abrir e fechar uma conexão com o banco de dados."""
         @wraps(func)
         def criar_consulta(cls, *args):        
             with mysql.connector.connect(**Conexao.banco_de_dados) as acessar_banco:

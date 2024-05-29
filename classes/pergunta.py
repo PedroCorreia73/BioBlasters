@@ -1,5 +1,3 @@
-
-
 class Pergunta:
     def __init__(self, pergunta):
         self.alternativas = []
