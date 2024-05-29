@@ -53,6 +53,7 @@ class TelaAutenticacao:
                                         usuario.id = verificar[0][0]
                                         usuario.nome = nome_usuario
                                         usuario.senha = senha_usuario
+                                        usuario.id_grupo = verificar[0][3]
                                         return False
                                     else:
                                         senha_texto.set_text("")
@@ -77,6 +78,7 @@ class TelaAutenticacao:
                                         usuario.id = verificar[0][0]
                                         usuario.nome = nome_usuario
                                         usuario.senha = senha_usuario
+                                        usuario.id_grupo = verificar[0][3]
                                         return False
                                     else:
                                         senha_texto.set_text("")

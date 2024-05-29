@@ -40,8 +40,13 @@ class Menu:
                     run = False
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == jogar_botao:
-                        repetir = TelaJogar.jogar(self.tela)
-                        return repetir
+                        if usuario.id_grupo == None:
+                            pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>É necessário entrar em um grupo antes</p>")
+                        else:    
+                            repetir = TelaJogar.jogar(self.tela)
+                            return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela)
                         repetir = tela_grupo.entrar_grupo(usuario)
@@ -90,8 +95,13 @@ class Menu:
                     run = False
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == jogar_botao:
-                        repetir = TelaJogar.jogar(self.tela)
-                        return repetir
+                        if usuario.id_grupo == None:
+                            pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>É necessário criar um grupo antes</p>")
+                        else:
+                            repetir = TelaJogar.jogar(self.tela)
+                            return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela)
                         repetir = tela_grupo.criar_grupo(usuario)
@@ -101,9 +111,14 @@ class Menu:
                         repetir = tela_ajustes.ajustes()
                         return repetir
                     elif event.ui_element == perguntas_botao:
-                        tela_perguntas = TelaPerguntas(self.tela)
-                        repetir = tela_perguntas.mostrar_perguntas(usuario)
-                        return repetir
+                        if usuario.id_grupo == None:
+                            pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>É necessário criar um grupo antes</p>")
+                        else:
+                            tela_perguntas = TelaPerguntas(self.tela)
+                            repetir = tela_perguntas.mostrar_perguntas(usuario)
+                            return repetir
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))

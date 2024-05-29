@@ -45,7 +45,7 @@ class TelaGrupo:
                                 AlunoDAO.vincular_grupo(usuario)
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
-                                                                                        html_message=f'<p>Bem vindo ao grupo {grupo[0][1]}</p>')
+                                                                                        html_message=f'<p>Bem vindo ao grupo: {grupo[0][1]}</p>')
                     elif event.ui_element == voltar_botao:
                         run = False
                 self.tela.manager.process_events(event)
