@@ -1,3 +1,5 @@
+from banco_de_dados.pergunta import PerguntaAlternativasDAO
+
 class Pergunta:
     def __init__(self, pergunta):
         self.alternativas = []
@@ -8,7 +10,8 @@ class Pergunta:
             elif pergunta[item] == "enunciado":
                 self.enunciado = pergunta[item]
             self.alternativas.append(pergunta[item])
-    def obter_pergunta():
+
+    def obter_pergunta(self):
         pass
-    def __str__():
+    def gerar_pergunta(self):
         pass

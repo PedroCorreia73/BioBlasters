@@ -167,5 +167,31 @@
                 "resource": "botao_voltar_pequeno.png"
             }
         }
+    },
+    "@botao_sair": {
+        "colours": {
+            "normal_bg": "#00000000",
+            "hovered_bg": "#00000000",
+            "disabled_bg": "#00000000",
+            "selected_bg": "#00000000",
+            "active_bg": "#00000000",
+            "dark_bg": "#00000000",
+            "normal_text": "#00000000",
+            "hovered_text": "#00000000",
+            "selected_text": "#00000000",
+            "disabled_text": "#00000000",
+            "active_text": "#00000000",
+            "normal_border": "#00000000",
+            "hovered_border": "#00000000",
+            "disabled_border": "#00000000",
+            "selected_border": "#00000000",
+            "active_border": "#00000000"
+        },
+        "images": {
+            "normal_image": {
+                "package": "imagens",
+                "resource": "botao_sair.png"
+            }
+        }
     }
 }

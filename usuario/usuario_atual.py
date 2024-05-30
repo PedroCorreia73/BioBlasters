@@ -6,8 +6,6 @@ class Usuario(ABC):
         self._id_usuario = None
         self._nome_usuario = None
         self._senha_usuario = None
-        
-
     @abstractmethod
     def entrar_menu():
         pass

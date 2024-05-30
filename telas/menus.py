@@ -4,7 +4,7 @@ from telas.tela_jogar import TelaJogar
 from telas.tela_grupo import TelaGrupo
 from telas.tela_perguntas import TelaPerguntas
 from telas.tela_ajustes import TelaAjustes
-
+from pygame_gui.core import ObjectID
 
 class Menu:
     def __init__(self, tela):
@@ -30,6 +30,10 @@ class Menu:
                                              text='Ajustes',
                                              manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
+        sair_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1795 * self.tela.proporcao_x, 43 * self.tela.proporcao_y), (65.94 * self.tela.proporcao_x, 64 * self.tela.proporcao_y)),
+                                                    text="",
+                                                    object_id=ObjectID(class_id="@botao_sair"),
+                                                    manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True
         while run:
@@ -55,6 +59,8 @@ class Menu:
                         tela_ajustes = TelaAjustes(self.tela)
                         repetir = tela_ajustes.ajustes()
                         return repetir
+                    elif event.ui_element == sair_botao:
+                        run = False
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
@@ -86,6 +92,10 @@ class Menu:
                                              text='Perguntas',
                                              manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
+        sair_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1795 * self.tela.proporcao_x, 43 * self.tela.proporcao_y), (65.94 * self.tela.proporcao_x, 64 * self.tela.proporcao_y)),
+                                                    text="",
+                                                    object_id=ObjectID(class_id="@botao_sair"),
+                                                    manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True
         while run:
@@ -119,6 +129,8 @@ class Menu:
                             tela_perguntas = TelaPerguntas(self.tela)
                             repetir = tela_perguntas.mostrar_perguntas(usuario)
                             return repetir
+                    elif event.ui_element == sair_botao:
+                        run = False
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
@@ -137,12 +149,18 @@ class Menu:
                                              text='Como Jogar',
                                              manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
+        sair_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1795 * self.tela.proporcao_x, 43 * self.tela.proporcao_y), (65.94 * self.tela.proporcao_x, 64 * self.tela.proporcao_y)),
+                                                    text="",
+                                                    object_id=ObjectID(class_id="@botao_sair"),
+                                                    manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True
         while run:
             time_delta = clock.tick(60) / 1000.00
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    run = False
+                elif event.ui_element == sair_botao:
                     run = False
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
