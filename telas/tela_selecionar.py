@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+from pygame_gui.core import ObjectID
 from usuario.usuario_atual import Aluno, Professor, Administrador
 
 class TelaSelecionar:
@@ -13,8 +14,11 @@ class TelaSelecionar:
         professor_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x, 500 * tela.proporcao_y), tela.tamanho_botao),
                                              text='Professor',
                                              manager=tela.manager)
-        administrador_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x, 900 * tela.proporcao_y), tela.tamanho_botao),
-                                             text=' ',
+        administrador_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-180 * tela.proporcao_x,-150 * tela.proporcao_y), (200 * tela.proporcao_x , 150 * tela.proporcao_y)),
+                                             text='',
+                                             object_id=ObjectID(class_id="@botao_admin"),
+                                             anchors={"bottom":"bottom",
+                                                      "right":"right"},
                                              manager=tela.manager)
         clock = pygame.time.Clock()
         run = True

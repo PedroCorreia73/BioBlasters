@@ -6,7 +6,7 @@ class PerguntaAlternativasDAO:
     def ver_previa_perguntas(cls, args):
         id_grupo = args[0]
         obter_perguntas = """SELECT idPerguntaAlternativas, texto_enunciado 
-                            FROM "Pergunta-Alternativas" AS pa INNER JOIN Pergunta AS p
+                            FROM Pergunta_Alternativas AS pa INNER JOIN Pergunta AS p
                                                         ON pa.idPergunta = p.idPergunta
                             WHERE idGrupo = %s"""
         valores = (id_grupo,)
@@ -33,14 +33,14 @@ class PerguntaAlternativasDAO:
                 id_alternativa = AlternativaDAO.adicionar_alternativa(alternativas[i])
                 valores = (id_pergunta,id_grupo,id_enunciado, id_alternativa, id_tentativa, 0)
                 dados.append(valores)
-        adicionar_pergunta_alternativas = """INSERT INTO "Pergunta-Alternativas"(idPerguntaAlternativas, idGrupo, idPergunta, idAlternativa, idTentativa, alternativa_correta)
+        adicionar_pergunta_alternativas = """INSERT INTO Pergunta_Alternativas"idPerguntaAlternativas, idGrupo, idPergunta, idAlternativa, idTentativa, alternativa_correta)
                                 VALUES(%s,%s,%s,%s,%s,%s)"""
         cls.consulta.executemany(adicionar_pergunta_alternativas,dados)
         return None
     
     @classmethod
     def obter_id_pergunta(cls, cursor):
-        obter_id_pergunta = """SELECT MAX(idPerguntaAlternativas) FROM "Pergunta-Alternativas" """
+        obter_id_pergunta = """SELECT MAX(idPerguntaAlternativas) FROM Pergunta_Alternativas """
         cursor.execute(obter_id_pergunta,)
         resultado = cursor.fetchall()
         if resultado[0][0] == None:
