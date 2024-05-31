@@ -6,10 +6,11 @@ from banco_de_dados.professor import ProfessorDAO
 from banco_de_dados.aluno import AlunoDAO
 
 class TelaGrupo:
-    def __init__(self,tela):
+    def __init__(self,tela, usuario):
         self.tela = tela
+        self.usuario = usuario
         
-    def entrar_grupo(self, usuario):
+    def entrar_grupo(self):
         self.tela.manager.clear_and_reset()
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         pygame.display.update()
@@ -41,8 +42,8 @@ class TelaGrupo:
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>O grupo não existe</p>')
                             else:
-                                usuario.id_grupo = grupo[0][0]
-                                AlunoDAO.vincular_grupo(usuario)
+                                self.usuario.id_grupo = grupo[0][0]
+                                AlunoDAO.vincular_grupo(self.usuario)
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Bem vindo ao grupo: {grupo[0][1]}</p>')
@@ -55,7 +56,7 @@ class TelaGrupo:
             pygame.display.flip()
         return True
     
-    def criar_grupo(self, usuario):
+    def criar_grupo(self):
         self.tela.manager.clear_and_reset()
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         pygame.display.update()
@@ -94,8 +95,8 @@ class TelaGrupo:
                             verificar = GrupoDAO.procurar_grupo(grupo)
                             if len(verificar) == 0:
                                 GrupoDAO.adicionar_grupo(grupo)
-                                usuario.id_grupo = grupo.id
-                                ProfessorDAO.vincular_grupo(usuario)
+                                self.usuario.id_grupo = grupo.id
+                                ProfessorDAO.vincular_grupo(self.usuario)
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Grupo criado</p>')

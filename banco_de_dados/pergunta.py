@@ -65,15 +65,16 @@ class PerguntaAlternativasDAO:
     @Conexao.consultar
     def obter_enunciado_e_tentativa(cls, args):
         id_pergunta_alternativas = args[0]
+        id_grupo = args[1]
         obter_enunciado_e_tentativa = """SELECT idPerguntaAlternativas, ANY_VALUE(texto_enunciado) AS texto_enunciado, 
                                                 ANY_VALUE(numero_tentativas) AS numero_tentativas, ANY_VALUE(numero_acertos) AS numero_acertos
                             FROM Pergunta_Alternativas AS pa INNER JOIN Pergunta AS p
                                                         ON pa.idPergunta = p.idPergunta
                                                         INNER JOIN Tentativa AS t
                                                         ON pa.idTentativa = t.idTentativa
-                            WHERE pa.idPerguntaAlternativas = %s
+                            WHERE pa.idPerguntaAlternativas = %s AND idGrupo = %s
                             GROUP BY pa.idPerguntaAlternativas"""
-        valores = (id_pergunta_alternativas,)
+        valores = (id_pergunta_alternativas, id_grupo)
         cls.consulta.execute(obter_enunciado_e_tentativa, valores)
         resultado = dict(zip(cls.consulta.column_names, cls.consulta.fetchone()))
         return resultado
@@ -95,11 +96,12 @@ class AlternativaDAO:
     @Conexao.consultar
     def obter_alternativas(cls, args):
         id_pergunta_alternativas = args[0]
+        id_grupo = args[1]
         obter_alternativas = """SELECT alternativa, alternativa_correta
                                 FROM Alternativa AS a INNER JOIN Pergunta_Alternativas AS pa
                                                       ON a.idAlternativa = pa.idAlternativa
-                                WHERE pa.idPerguntaAlternativas = %s"""
-        valores = (id_pergunta_alternativas,)
+                                WHERE pa.idPerguntaAlternativas = %s AND idGrupo = %s"""
+        valores = (id_pergunta_alternativas, id_grupo)
         cls.consulta.execute(obter_alternativas,valores)
         resultado = cls.consulta.fetchall()
         return resultado

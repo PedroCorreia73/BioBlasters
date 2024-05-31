@@ -53,8 +53,8 @@ class Menu:
                             repetir = tela_jogar.jogar()
                             return repetir
                     elif event.ui_element == grupo_botao:
-                        tela_grupo = TelaGrupo(self.tela)
-                        repetir = tela_grupo.entrar_grupo(usuario)
+                        tela_grupo = TelaGrupo(self.tela, usuario)
+                        repetir = tela_grupo.entrar_grupo()
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
@@ -111,12 +111,12 @@ class Menu:
                                                                                          manager=self.tela.manager,
                                                                                          html_message="<p>É necessário criar um grupo antes</p>")
                         else:
-                            tela_jogar = TelaJogar(self.tela)
+                            tela_jogar = TelaJogar(self.tela, usuario)
                             repetir = tela_jogar.jogar()
                             return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela, usuario)
-                        repetir = tela_grupo.criar_grupo(usuario)
+                        repetir = tela_grupo.criar_grupo()
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
