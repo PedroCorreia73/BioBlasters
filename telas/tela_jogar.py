@@ -7,20 +7,26 @@ from classes.bala import Bala, Balas
 from classes.item_pergunta import ItemPergunta, ItensPergunta
 from classes.pontuacao import Pontuacao
 from classes.jogo import Jogo
+from classes.pergunta import Perguntas
 
 class TelaJogar():
-    def jogar(tela):
-        tela.manager.clear_and_reset() # Reseta os elementos do pygame_gui
-        tela.tempo_inicio = time.time()
+    def __init__(self, tela, usuario):
+        self.tela = tela
+        self.usuario = usuario
+
+    def jogar(self):
+        self.tela.manager.clear_and_reset() # Reseta os elementos do pygame_gui
+        self.tela.tempo_inicio = time.time()
         nave = Nave() # Iniciando a nave do jogador
         pontuacao = Pontuacao() #Iniciando a pontuação 
         obstaculos = Obstaculos() #Iniciando coleção de obstáculos que aparecem na tela
         itens_pergunta = ItensPergunta() # Iniciando coleção de perguntas que aparecem na tela
         balas = Balas() # Iniciando coleção de balas que aparecem na tela
+        perguntas = Perguntas(self.usuario.id_grupo) #Iniciando coleção de perguntas
 
         # SURFACE = pygame.Surface((tela.WIDTH, tela.HEIGHT), pygame.SRCALPHA)
         bg_pergunta = pygame.image.load("imagens/bg_pergunta.png")
-        origem_plano_resposta = (((tela.WIDTH - bg_pergunta.get_width())/2, (tela.HEIGHT - bg_pergunta.get_height())/2))
+        origem_plano_resposta = (((self.tela.WIDTH - bg_pergunta.get_width())/2, (self.tela.HEIGHT - bg_pergunta.get_height())/2))
         
         clock = pygame.time.Clock()
         elapsed_time = 0 #tempo que se passou desde a epoch
@@ -36,8 +42,8 @@ class TelaJogar():
             obstaculos.contagem += aux_clock #limitação de FPS
             itens_pergunta.contagem += aux_clock
             if not nave.pegou_item_pergunta:
-                tela.loop() # responsável por mover o fundo da tela
-                elapsed_time = time.time() - tela.tempo_inicio - t #tempo que se passou desde que o jogo começou
+                self.tela.loop() # responsável por mover o fundo da tela
+                elapsed_time = time.time() - self.tela.tempo_inicio - t #tempo que se passou desde que o jogo começou
                 pontuacao.tempo = round(elapsed_time)
                 pontuacao.atual = pontuacao.tempo + pontuacao.ganha
             #atualização de variáveis relacionadas à pontuação
@@ -46,9 +52,11 @@ class TelaJogar():
                 ti = 0
                 tf = 0
             #Sistema de spawn de item de pergunta
-                itens_pergunta.gerar(tela)
+                itens_pergunta.gerar(self.tela)
             #Sistema de spawn de obstáculos
-                tipo_obstaculo = obstaculos.gerar(tela)
+
+                obstaculos.gerar(self.tela)
+
                 if not keys_teclado[pygame.K_SPACE]:
                     Bala.aux_bala = 0
             # Sistema TEMPORÁRIO de coleta de balas
@@ -57,16 +65,16 @@ class TelaJogar():
             # Sistema de spawn de balas
                 balas.gerar(nave, keys_teclado)
             #movimentação de balas
-                balas.mover(tela)
+                balas.mover(self.tela)
             #hit de balas
                 balas.colidir(obstaculos)
             #movimentação da nave
-                nave.mover(tela, keys_mouse)
+                nave.mover(self.tela, keys_mouse)
             #movimentação de obstáculos
                 obstaculos.mover(nave)
 
             #-------------------hit de obstáculos-------------------
-                continuar_jogo = nave.colidir(tela) # nave.colidir() retorna se o jogo deve continuar baseado na vida da nave
+                continuar_jogo = nave.colidir(self.tela) # nave.colidir() retorna se o jogo deve continuar baseado na vida da nave
                 if not continuar_jogo:
                     return True
             #---------------------------------------------------------
@@ -79,7 +87,7 @@ class TelaJogar():
                 if aux_pontuacao_resposta == 1:
                     pontuacao.ganha += 100
                     ti = time.time()
-                tela.WIN.blit(bg_pergunta, origem_plano_resposta)
+                self.tela.WIN.blit(bg_pergunta, origem_plano_resposta)
                 enunciado_exemplo = "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Enunciado - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
                 a_exemplo = "A) Essa não é a alternativa correta."
                 b_exemplo = "B) Muito menos essa."
@@ -100,7 +108,7 @@ class TelaJogar():
                         if x + word_width >= pos[0] + bg_pergunta.get_width() - 10:
                             x = pos[0]
                             y += word_height
-                        tela.WIN.blit(word_surface, (x,y))
+                        self.tela.WIN.blit(word_surface, (x,y))
                         x += word_width + space
                     x = pos[0]
                     y += word_height
@@ -115,8 +123,9 @@ class TelaJogar():
                     nave.pegou_item_pergunta = False
                 pygame.display.update()
             # Desenhar os elementos na tela
-            tela.desenhar(nave, elapsed_time,
-                            pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos, tipo_obstaculo)
+            self.tela.desenhar(nave, elapsed_time,
+                            pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos)
+
             # fechar o jogo
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

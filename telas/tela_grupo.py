@@ -69,12 +69,14 @@ class TelaGrupo:
                                              placeholder_text='Código do Grupo',
                                              manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        criar_grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * self.tela.proporcao_x - tamanho_botao[0], 768 * self.tela.proporcao_y), (tamanho_botao)),
+        criar_grupo_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 768 * self.tela.proporcao_y), (tamanho_botao)),
                                                     text="Criar Grupo",
+                                                    anchors={"centerx" : "centerx"},
                                                     manager=self.tela.manager)
-        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * self.tela.proporcao_x, 768 * self.tela.proporcao_y), (tamanho_botao)),
+        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-400 * self.tela.proporcao_x, 768 * self.tela.proporcao_y), (tamanho_botao[0] / 2, tamanho_botao[1])),
                                                     text="",
                                                     object_id=ObjectID(class_id="@botao_voltar"),
+                                                    anchors={"right":"right"},
                                                     manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True

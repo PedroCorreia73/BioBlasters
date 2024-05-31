@@ -26,11 +26,12 @@ class TelaPerguntas:
                                                                 anchors={"centerx":"centerx",
                                                                         "centery":"centery"},
                                                                 manager=self.tela.manager)
-            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 45.58 * self.tela.proporcao_y), (86 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
+            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 10 * self.tela.proporcao_y), (100 * self.tela.proporcao_x, 70 * self.tela.proporcao_y)),
                                                         text="",
                                                         container=caixa_fundo,
                                                         object_id=ObjectID(class_id="@botao_voltar_pequeno"),
-                                                        anchors={"right":"right"},
+                                                        anchors={"right":"right",
+                                                                 "top":"top"},
                                                         manager=self.tela.manager)
             adicionar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((12.5 * self.tela.proporcao_x, -60 * self.tela.proporcao_y),(325 * self.tela.proporcao_x, 65 * self.tela.proporcao_y)),
                                                         text="Adicionar",
