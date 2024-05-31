@@ -54,7 +54,9 @@ class TelaJogar():
             #Sistema de spawn de item de pergunta
                 itens_pergunta.gerar(self.tela)
             #Sistema de spawn de obstáculos
+
                 obstaculos.gerar(self.tela)
+
                 if not keys_teclado[pygame.K_SPACE]:
                     Bala.aux_bala = 0
             # Sistema TEMPORÁRIO de coleta de balas
@@ -123,6 +125,7 @@ class TelaJogar():
             # Desenhar os elementos na tela
             self.tela.desenhar(nave, elapsed_time,
                             pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos)
+
             # fechar o jogo
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

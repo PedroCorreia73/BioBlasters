@@ -30,7 +30,7 @@ class TelaJogo:
         self.tamanho_botao = (360 * self.proporcao_x , 85 * self.proporcao_y)
 
 
-    def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos):
+    def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos, tipo_obstaculo):
         
         #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
         #WIN.blit(time_text, (10, 10))
@@ -56,11 +56,11 @@ class TelaJogo:
             #if hit_itempergunta is True and origem_plano_resposta[0] < obstaculo.x < origem_plano_resposta[0] + bgp.get_width() and origem_plano_resposta[1] < obstaculo.y and origem_plano_resposta[1] + bgp.get_height():
         #     pass
             #else:
-                #pygame.draw.rect(WIN, "yellow", obstaculo) #hitbox dos obstáculos
-                self.WIN.blit(Obstaculo.gerar_imagem(), (obstaculo.x - 8, obstaculo.y -8))
+            #pygame.draw.rect(self.WIN, "yellow", obstaculo) #hitbox dos obstáculos
+            self.WIN.blit(obstaculo.gerar_imagem(), (obstaculo.x - 8, obstaculo.y -8))
 
         for itempergunta in itens_pergunta.itens():
-            pygame.draw.rect(self.WIN, "blue", itempergunta) #hitbox dos obstáculos
+            #pygame.draw.rect(self.WIN, "blue", itempergunta) #hitbox dos itempergunta
             self.WIN.blit(ItemPergunta.gerar_imagem(), (itempergunta.x - 8, itempergunta.y -8))
         
         for bala in balas.itens():
