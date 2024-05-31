@@ -158,6 +158,10 @@ class TelaPerguntas:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                          manager=self.tela.manager,
                                                                                          html_message="<p>É necessário preencher o enunciado</p>")
+                            elif len(enunciado_texto.get_text()) > 700:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message=f"<p>O enunciado deve ter no máximo 700 caracteres</p><p>Tamanho atual: {len(enunciado_texto.get_text())} caracteres</p>")
                             elif self.alternativas[0] == "":
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                          manager=self.tela.manager,
@@ -170,6 +174,9 @@ class TelaPerguntas:
                                                                                             html_message="<p>Preencha pelo menos duas alternativas</p>")
                                 else:
                                     PerguntaAlternativasDAO.adicionar_pergunta(usuario.id_grupo, enunciado_texto.get_text(), alternativas_preenchidas)
+                                    self.alternativas = ["","","","",""]
+                                    self.enunciado = ""
+                                    enunciado_texto.set_text("")
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                             manager=self.tela.manager,
                                                                                             html_message="<p>Pergunta criada</p>")
@@ -239,8 +246,13 @@ class TelaPerguntas:
                     if event.ui_element == voltar_botao:
                         return True
                     elif event.ui_element == confirmar_botao:
-                        self.alternativas[indice] = alternativa_texto.get_text()
-                        return True
+                        if len(alternativa_texto.get_text()) > 300:
+                            pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                            manager=self.tela.manager,
+                                                                                            html_message=f"<p>A alternativa deve ter no máximo 300 caracteres</p><p>Tamanho atual: {len(alternativa_texto.get_text())} caracteres</p>")
+                        else:
+                            self.alternativas[indice] = alternativa_texto.get_text()
+                            return True
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
