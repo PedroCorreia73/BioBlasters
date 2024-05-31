@@ -116,6 +116,39 @@
             }
         }
     },
+    "text_box": {
+        "colours": {
+            "dark_bg": "#5C5C5C",
+            "normal_border": "#000000",
+            "normal_text": "#FFFFFF",
+            "link_text": "#FF0000",
+            "link_hover": "#FFFF00",
+            "link_selected": "#FFFFFF"
+        },
+        "font": {
+            "name": "Press Start 2P",
+            "size": 28,
+            "regular_resource": {
+                "package": "pygame_gui_configs",
+                "resource": "PressStart2P-Regular.ttf"
+            }
+        },
+        "misc": {
+            "border_width": "4",
+            "padding": "10,10",
+            "line_spacing": "1.25"
+        }
+    },
+    "text_box.vertical_scroll_bar": {
+        "colours": {
+            "dark_bg": "#505068"
+        }
+    },
+    "text_box.vertical_scroll_bar.#sliding_button": {
+        "misc": {
+            "border_width": "1"
+        }
+    },
     "@botao_voltar": {
         "colours": {
             "normal_bg": "#00000000",
@@ -202,7 +235,7 @@
             }
         }
     },
-    "@botao_admin":{
+    "@botao_admin": {
         "colours": {
             "normal_bg": "#00000000",
             "hovered_bg": "#00000000",
