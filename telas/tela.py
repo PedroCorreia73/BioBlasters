@@ -30,15 +30,11 @@ class TelaJogo:
         self.tamanho_botao = (360 * self.proporcao_x , 85 * self.proporcao_y)
 
 
-    def desenhar(self, nave, elapsed_time, pontuacao, aux_pontuacao_resposta, balas, itens_pergunta, obstaculos, tipo_obstaculo):
+    def desenhar(self, nave, pontuacao, balas, itens_pergunta, obstaculos):
         
-        #time_text = FONT.render(f"Tempo: {round(elapsed_time)}s", 1, "white")
-        #WIN.blit(time_text, (10, 10))
         hp_text = self.FONT.render(f"HP: {nave.hp}", 1, "white")
         self.WIN.blit(hp_text, (10, 10))
         pontuacao_text = self.FONT.render(f"Pontuação: {pontuacao.atual}", 1, "white")
-        if aux_pontuacao_resposta == 1:
-            pontuacao_text.set_alpha(0)
         self.WIN.blit(pontuacao_text, (200, 10))
 
         #rotação da nave, carregamento da imagem na tela e piscadinha
