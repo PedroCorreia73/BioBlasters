@@ -1,6 +1,9 @@
 from random import choice, shuffle
 import pygame
 import pygame_gui
+from pygame_gui.core.object_id import ObjectID
+import pygame_gui.elements.ui_window
+import pygame_gui.windows.ui_message_window
 from banco_de_dados.pergunta import PerguntaAlternativasDAO, AlternativaDAO
 
 
@@ -22,8 +25,6 @@ class Pergunta:
             letra_alternativa = chr(ord('A') + indice)
             texto_pergunta += f"<p>{letra_alternativa}. {self.alternativas[indice][0]}</p>"
             
-
-
 
         caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((0,0),(1760 * self.tela.proporcao_x, 980 * self.tela.proporcao_y)),
                                                     anchors={"centerx":"centerx",
@@ -64,14 +65,16 @@ class Pergunta:
 
     def verificar_resposta(self, indice):
         if self.alternativas[indice][1] == 1:
-            pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+            mensagem = pygame_gui.windows.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Resposta Correta</p>')
+            mensagem.set_blocking(True)
             return True
         else:
-            pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+            mensagem = pygame_gui.windows.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Resposta Incorreta</p>')
+            mensagem.set_blocking(True)
             return False
 
 class Perguntas:

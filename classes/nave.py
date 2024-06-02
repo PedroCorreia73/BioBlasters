@@ -52,9 +52,9 @@ class Nave(pygame.Rect):
             if not self.invencibilidade:
                 self.hp -= 10
                 self.invencibilidade = True
-                self.t_invencibilidade = time.time() + 2
+                self.tempo_invencibilidade = time.time() + 2
             self.colidiu_obstaculo = False
-        if self.invencibilidade and time.time() > self.t_invencibilidade:
+        if self.invencibilidade and time.time() > self.tempo_invencibilidade:
             self.invencibilidade = False
             self.aux_inv = 10
         if self.invencibilidade:
