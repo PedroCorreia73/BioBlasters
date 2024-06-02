@@ -1,7 +1,7 @@
 import pygame
 import pygame_gui
 import pygame_gui.elements.ui_panel
-from banco_de_dados.pergunta import PerguntaAlternativasDAO
+from banco_de_dados.pergunta import PerguntaAlternativasDAO, AlternativaDAO
 from pygame_gui.core import ObjectID
 
 class TelaPerguntas:
@@ -26,7 +26,7 @@ class TelaPerguntas:
                                                                 anchors={"centerx":"centerx",
                                                                         "centery":"centery"},
                                                                 manager=self.tela.manager)
-            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 10 * self.tela.proporcao_y), (100 * self.tela.proporcao_x, 70 * self.tela.proporcao_y)),
+            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 23), (120 * self.tela.proporcao_x, 80 * self.tela.proporcao_y)),
                                                         text="",
                                                         container=caixa_fundo,
                                                         object_id=ObjectID(class_id="@botao_voltar_pequeno"),
@@ -56,13 +56,14 @@ class TelaPerguntas:
                                                         anchors={"left_target":editar_botao,
                                                                     "bottom":"bottom"},
                                                         manager=self.tela.manager)
-            pygame_gui.elements.UILabel(relative_rect=pygame.Rect((0, 20 * self.tela.proporcao_y), (500 * self.tela.proporcao_x, 75 * self.tela.proporcao_y)),
+            pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20 * self.tela.proporcao_x, 50 * self.tela.proporcao_y), (-1,-1)),
                                         container=caixa_fundo,
                                         anchors={"bottom_target" : perguntas},
                                         text="Perguntas:",
                                         manager=self.tela.manager)
             
             clock = pygame.time.Clock()
+            continuar = True
             run = True
             while run:
                 time_delta = clock.tick(60) / 1000.00
@@ -74,12 +75,24 @@ class TelaPerguntas:
                             return True
                         elif event.ui_element == adicionar_botao:
                             continuar = self.adicionar_perguntas(usuario)
-                            if continuar == False:
+                            if not continuar:
                                 return False
                             else:
                                 run = False
                         elif event.ui_element == remover_botao:
                             perguntas.remove_items(perguntas.get_single_selection())
+                        elif event.ui_element == visualizar_botao:
+                            pergunta_selecionada = perguntas.get_single_selection()
+                            if pergunta_selecionada is None:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>Selecione uma pergunta</p>")
+                            else:
+                                continuar = self.visualizar_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
+                            if not continuar:
+                                return False
+                            else:
+                                run = False
                     self.tela.manager.process_events(event)
                 self.tela.manager.update(time_delta)
                 self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
@@ -103,7 +116,7 @@ class TelaPerguntas:
             caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((0, 415 * self.tela.proporcao_y),(1400 * self.tela.proporcao_x, 650 * self.tela.proporcao_y)),
                                                     manager=self.tela.manager,
                                                     anchors={"centerx":"centerx"})
-            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 45.58 * self.tela.proporcao_y), (86 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
+            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 23), (120 * self.tela.proporcao_x, 80 * self.tela.proporcao_y)),
                                                         text="",
                                                         container=caixa_fundo,
                                                         object_id=ObjectID(class_id="@botao_voltar_pequeno"),
@@ -137,11 +150,12 @@ class TelaPerguntas:
                                                             anchors={"left_target":cancelar_botao,
                                                                     "bottom":"bottom"},
                                                             manager=self.tela.manager)
-            pygame_gui.elements.UILabel(relative_rect=pygame.Rect((0, 50 * self.tela.proporcao_y), (500 * self.tela.proporcao_x, 75 * self.tela.proporcao_y)),
+            pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20 * self.tela.proporcao_x, 50 * self.tela.proporcao_y), (-1,-1)),
                                         container=caixa_fundo,
                                         anchors={"bottom_target" : enunciado_texto},
                                         text="Digite o enunciado:",
                                         manager=self.tela.manager)
+            enunciado_texto.focus()
             clock = pygame.time.Clock()
             run = True
             enunciado_texto.set_text(self.enunciado)
@@ -197,6 +211,7 @@ class TelaPerguntas:
                 self.tela.manager.draw_ui(self.tela.WIN)
                 pygame.display.flip()
         return True
+    
     def adicionar_alternativa(self, indice, texto):
         self.tela.manager.clear_and_reset()
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
@@ -204,7 +219,7 @@ class TelaPerguntas:
         caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((0, 415 * self.tela.proporcao_y),(1400 * self.tela.proporcao_x, 650 * self.tela.proporcao_y)),
                                                   manager=self.tela.manager,
                                                   anchors={"centerx":"centerx"})
-        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 45.58 * self.tela.proporcao_y), (86 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
+        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 23), (120 * self.tela.proporcao_x, 80 * self.tela.proporcao_y)),
                                                     text="",
                                                     container=caixa_fundo,
                                                     object_id=ObjectID(class_id="@botao_voltar_pequeno"),
@@ -227,13 +242,14 @@ class TelaPerguntas:
                                                         anchors={"left_target":cancelar_botao,
                                                                  "bottom":"bottom"},
                                                         manager=self.tela.manager)
-        pygame_gui.elements.UILabel(relative_rect=pygame.Rect((0, 0), (750 * self.tela.proporcao_x, 100 * self.tela.proporcao_y)),
+        pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20 * self.tela.proporcao_x, 50 * self.tela.proporcao_y), (-1, -1)),
                                     container=caixa_fundo,
                                     anchors={"bottom_target" : alternativa_texto},
                                     text=f"Insira a {texto}:",
                                     manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True
+        alternativa_texto.focus()
         alternativa_texto.set_text(self.alternativas[indice])
         while run:
             time_delta = clock.tick(60) / 1000.00
@@ -259,3 +275,69 @@ class TelaPerguntas:
             self.tela.manager.draw_ui(self.tela.WIN)
             pygame.display.flip()
         return True
+    
+    def visualizar_pergunta(self, id_pergunta, id_grupo):
+        self.tela.manager.clear_and_reset()
+        BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
+
+        enunciado_e_tentativa = PerguntaAlternativasDAO.obter_enunciado_e_tentativa(id_pergunta, id_grupo)
+
+        enunciado = enunciado_e_tentativa["texto_enunciado"]
+        numero_tentativas = enunciado_e_tentativa["numero_tentativas"]
+        numero_acertos = enunciado_e_tentativa["numero_acertos"]
+
+        alternativas = AlternativaDAO.obter_alternativas(id_pergunta, id_grupo)
+
+        texto_pergunta = f"<p>{enunciado}</p>"
+        texto_pergunta += "<p></p>"
+        
+        for indice in range(len(alternativas)):
+            letra_alternativa = chr(ord('A') + indice)
+            if alternativas[indice][1] == 1:
+                texto_pergunta += f"<p>{letra_alternativa}. {alternativas[indice][0]} (Correta)</p>"
+            else:
+                texto_pergunta += f"<p>{letra_alternativa}. {alternativas[indice][0]}</p>"
+
+        texto_pergunta += "<p></p>"
+        texto_pergunta += f"<p>Número de tentativas: {numero_tentativas}</p>"
+        texto_pergunta += f"<p>Número de acertos: {numero_acertos}</p>"
+
+            
+
+        caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((0, 415 * self.tela.proporcao_y),(1400 * self.tela.proporcao_x, 650 * self.tela.proporcao_y)),
+                                                    anchors={"centerx":"centerx"},
+                                                    manager=self.tela.manager)
+        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 23), (120 * self.tela.proporcao_x, 80 * self.tela.proporcao_y)),
+                                                    text="",
+                                                    container=caixa_fundo,
+                                                    object_id=ObjectID(class_id="@botao_voltar_pequeno"),
+                                                    anchors={"right":"right"},
+                                                    manager=self.tela.manager)
+        pergunta = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((0, 110 * self.tela.proporcao_y),(1300 * self.tela.proporcao_x, 500 * self.tela.proporcao_y)),
+                                                   html_text= texto_pergunta,
+                                                   container=caixa_fundo,
+                                                   anchors={"centerx" : "centerx",
+                                                            "top" : "top"},
+                                                   manager=self.tela.manager)
+        pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20 * self.tela.proporcao_x, 50 * self.tela.proporcao_y), (-1, -1)),
+                                    container=caixa_fundo,
+                                    anchors={"bottom_target" : pergunta},
+                                    text=f"Pergunta {id_pergunta} do grupo {id_grupo}:",
+                                    manager=self.tela.manager)
+        clock = pygame.time.Clock()
+        run = True
+        while run:
+            time_delta = clock.tick(60) / 1000.00
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return False              
+                elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == voltar_botao:
+                        return True        
+                self.tela.manager.process_events(event)
+            self.tela.manager.update(time_delta)
+            self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
+            self.tela.manager.draw_ui(self.tela.WIN)
+            pygame.display.flip()
+        return True
+    
