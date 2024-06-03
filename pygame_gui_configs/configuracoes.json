@@ -149,6 +149,19 @@
             "border_width": "1"
         }
     },
+    "status_bar": {
+        "colours": {
+            "normal_border": "#AAAAAA",
+            "filled_bar": "#90ee90",
+            "unfilled_bar": "#CCCCCC"
+        },
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "10",
+            "follow_sprite_offset": "-5, 32",
+            "border_width": "0"
+        }
+    },
     "@botao_voltar": {
         "colours": {
             "normal_bg": "#00000000",
@@ -232,6 +245,10 @@
             "normal_image": {
                 "package": "imagens",
                 "resource": "botao_sair.png"
+            },
+            "hovered_image": {
+                "package": "imagens",
+                "resource": "botao_sair_hovered.png"
             }
         }
     },
@@ -259,6 +276,21 @@
                 "package": "imagens",
                 "resource": "botao_admin.png"
             }
+        }
+    },
+    "@hud": {
+        "colours": {
+            "dark_bg": "#5C5C5C",
+            "normal_border": "#484D50"
+        },
+        "background_image": {
+            "package": "imagens",
+            "resource": "hud_jogo.png"
+        },
+        "misc": {
+            "shape": "rectangle",
+            "border_width": "10",
+            "shadow_width": "0"
         }
     }
 }

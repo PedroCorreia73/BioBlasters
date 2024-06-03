@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+from pygame_gui.core import ObjectID
 import time
 from classes.obstaculo import Obstaculos
 from classes.nave import Nave
@@ -8,6 +9,7 @@ from classes.item_pergunta import ItensPergunta
 from classes.pontuacao import Pontuacao
 from classes.jogo import Jogo
 from classes.pergunta import Perguntas
+
 
 class TelaJogar():
     def __init__(self, tela, usuario):
@@ -22,6 +24,10 @@ class TelaJogar():
         itens_pergunta = ItensPergunta() # Iniciando coleção de perguntas que aparecem na tela
         balas = Balas() # Iniciando coleção de balas que aparecem na tela
         perguntas = Perguntas(self.usuario.id_grupo) #Iniciando coleção de perguntas
+
+        hud_jogo = HUD(self.tela, nave) # Objeto responsável por gerar o HUD durante o jogo
+        hud_jogo.gerar_elementos() # Gera os elementos do HUD
+        self.tela.HEIGHT -= hud_jogo.HEIGHT # Faz com que nenhum objeto possa ultrapassar o HUD
 
         self.tela.tempo_inicio = time.time()
         tempo_em_perguntas = 0 # Tempo total que o usuário gastou nas perguntas -- Serve apenas para ajustar a pontuação
@@ -73,18 +79,42 @@ class TelaJogar():
             else:
                 tempo_antes_da_pergunta = time.time()
                 acertou = perguntas.gerar_pergunta(self.tela)
+                self.tela.manager.clear_and_reset()
+                self.tela.WIN.blit(pygame.transform.scale(self.tela.BG, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
+                hud_jogo.gerar_elementos() # Gera os elementos do HUD
                 tempo_em_perguntas += time.time() - tempo_antes_da_pergunta
                 nave.pegou_item_pergunta = False
                 if acertou:
-                    pontuacao.ganha += 400
-                nave.invencibilidade = True
-                nave.t_invencibilidade = time.time() + 2
-
-            # Desenhar os elementos na tela
-            self.tela.desenhar(nave, pontuacao, balas, itens_pergunta, obstaculos)
+                    pontuacao.ganha += 400 # Aumenta a pontuação caso o usuário tenha acertado a pergunta
+                nave.invencibilidade = True # Permite que o usuário fique invencível durante um tempo
+                nave.tempo_invencibilidade = time.time() + 1
 
             # fechar o jogo
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return False
+                self.tela.manager.process_events(event)
+            # Desenhar os elementos na tela
+            self.tela.manager.update(aux_clock)
+            self.tela.manager.draw_ui(self.tela.WIN)
+            self.tela.desenhar(nave, pontuacao, balas, itens_pergunta, obstaculos)
+
+            
         return False
+    
+class HUD:
+    def __init__(self, tela, nave):
+        self.tela = tela
+        self.nave = nave
+        
+    def gerar_elementos(self):
+        self.hud_jogo = pygame_gui.elements.UIPanel(relative_rect= ((0, -100 * self.tela.proporcao_y), (self.tela.WIN.get_width(), 100 * self.tela.proporcao_y)),
+                                        manager=self.tela.manager,
+                                        object_id=ObjectID(class_id="@hud"),
+                                        anchors={"bottom":"bottom"})
+        self.vida_nave = pygame_gui.elements.UIStatusBar(relative_rect=((100 * self.tela.proporcao_x , 10), (500 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
+                                                percent_method= lambda : self.nave.hp / 100,
+                                                container=self.hud_jogo,
+                                                manager= self.tela.manager,
+                                                anchors={"centery":"centery"})
+        self.HEIGHT = self.hud_jogo.get_relative_rect().height
