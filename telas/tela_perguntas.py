@@ -69,7 +69,14 @@ class TelaPerguntas:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         return False
-                    if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.type == pygame_gui.UI_CONFIRMATION_DIALOG_CONFIRMED:
+                        if event.ui_element == remover_confirmacao:
+                            continuar = self.remover_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
+                            if continuar == False:
+                                return False
+                            else:
+                                run = False
+                    elif event.type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element == voltar_botao:
                             return True
                         elif event.ui_element == adicionar_botao:
@@ -85,15 +92,9 @@ class TelaPerguntas:
                                                                                          manager=self.tela.manager,
                                                                                          html_message="<p>Selecione uma pergunta</p>")
                             else:
-                                pygame_gui.windows.UIConfirmationDialog(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                remover_confirmacao = pygame_gui.windows.UIConfirmationDialog(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                             manager=self.tela.manager,
                                                                             action_long_desc= "<p>Deseja mesmo remover a pergunta?</p>")
-                                if event.type == pygame_gui.UI_CONFIRMATION_DIALOG_CONFIRMED:
-                                    continuar = self.remover_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
-                                    if continuar == False:
-                                        return False
-                                    else:
-                                        run = False
                         elif event.ui_element == visualizar_botao:
                             pergunta_selecionada = perguntas.get_single_selection()
                             if pergunta_selecionada == None:
@@ -486,3 +487,4 @@ class TelaPerguntas:
             
     def remover_pergunta(self, id_pergunta, id_grupo):
         PerguntaAlternativasDAO.remover_pergunta(id_pergunta, id_grupo)
+        return True
