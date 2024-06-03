@@ -78,6 +78,44 @@ class PerguntaAlternativasDAO:
         cls.consulta.execute(obter_enunciado_e_tentativa, valores)
         resultado = dict(zip(cls.consulta.column_names, cls.consulta.fetchone()))
         return resultado
+    
+    @classmethod
+    @Conexao.consultar
+    def editar_pergunta(cls, args):
+        id_pergunta_alternativas = args[0]
+        id_grupo = args[1]
+        enunciado = args[2]
+        alternativas = args[3]
+        obter_ids = "SELECT idPergunta, idAlternativa, idTentativa FROM Pergunta_Alternativas WHERE idPerguntaAlternativas = %s AND idGrupo = %s ORDER BY 1"
+        valores = (id_pergunta_alternativas, id_grupo)
+        cls.consulta.execute(obter_ids, valores)
+        resultado = cls.consulta.fetchall()
+        PerguntaDAO.editar_enunciado(resultado[0][0], enunciado)
+        for i in range(len(alternativas)):
+            if alternativas[i] == "":
+                if len(resultado) >= i + 1:
+                    cls.consulta.execute("DELETE FROM Pergunta_Alternativas WHERE idPerguntaAlternativas = %s AND idGrupo = %s AND idAlternativa = %s",
+                                        (id_pergunta_alternativas, id_grupo, resultado[i][1]))
+                else:
+                    continue
+            elif alternativas[i] != "" and len(resultado) < i + 1:
+                id_alternativa = AlternativaDAO.adicionar_alternativa(alternativas[i])
+                cls.consulta.execute("""INSERT INTO Pergunta_Alternativas (idPerguntaAlternativas, idGrupo, idPergunta, idAlternativa, idTentativa, alternativa_correta)
+                                VALUES(%s,%s,%s,%s,%s,0)""", 
+                                (id_pergunta_alternativas, id_grupo, resultado[0][0], id_alternativa, resultado[0][2]))
+            else:
+                AlternativaDAO.editar_alternativa(resultado[i][1], alternativas[i])
+        return None
+
+    @classmethod
+    @Conexao.consultar
+    def remover_pergunta(cls, args):
+        id_pergunta_alternativas = args[0]
+        id_grupo = args[1]
+        remover_pergunta = "DELETE FROM Pergunta_Alternativas WHERE idPerguntaAlternativas = %s AND idGrupo = %s"
+        valores = (id_pergunta_alternativas, id_grupo)
+        cls.consulta.execute(remover_pergunta, valores)
+        return None
         
 
         
@@ -106,6 +144,17 @@ class AlternativaDAO:
         resultado = cls.consulta.fetchall()
         return resultado
     
+    @classmethod
+    @Conexao.consultar
+    def editar_alternativa(cls,args):
+        id_alternativa = args[0]
+        alternativa = args[1]
+        editar_enunciado = "UPDATE Alternativa SET alternativa = %s WHERE idAlternativa = %s"
+        valores = (alternativa, id_alternativa)
+        cls.consulta.execute(editar_enunciado, valores)
+        return None
+    
+    
 class PerguntaDAO:
     @classmethod
     @Conexao.consultar
@@ -117,6 +166,17 @@ class PerguntaDAO:
         id_enunciado = cls.consulta.lastrowid
         return id_enunciado
     
+    @classmethod
+    @Conexao.consultar
+    def editar_enunciado(cls,args):
+        id_pergunta = args[0]
+        enunciado = args[1]
+        editar_enunciado = "UPDATE Pergunta SET texto_enunciado = %s WHERE idPergunta = %s"
+        valores = (enunciado, id_pergunta)
+        cls.consulta.execute(editar_enunciado, valores)
+        return None
+        
+    
 class TentativaDAO:
     @classmethod
     @Conexao.consultar
@@ -126,4 +186,5 @@ class TentativaDAO:
         cls.consulta.execute(criar_tentativas, valores)
         id_tentativa = cls.consulta.lastrowid
         return id_tentativa
+    
     

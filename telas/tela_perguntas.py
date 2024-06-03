@@ -63,7 +63,6 @@ class TelaPerguntas:
                                         manager=self.tela.manager)
             
             clock = pygame.time.Clock()
-            continuar = True
             run = True
             while run:
                 time_delta = clock.tick(60) / 1000.00
@@ -75,24 +74,50 @@ class TelaPerguntas:
                             return True
                         elif event.ui_element == adicionar_botao:
                             continuar = self.adicionar_perguntas(usuario)
-                            if not continuar:
+                            if continuar == False:
                                 return False
                             else:
                                 run = False
                         elif event.ui_element == remover_botao:
-                            perguntas.remove_items(perguntas.get_single_selection())
+                            pergunta_selecionada = perguntas.get_single_selection()
+                            if pergunta_selecionada == None:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>Selecione uma pergunta</p>")
+                            else:
+                                pygame_gui.windows.UIConfirmationDialog(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                            manager=self.tela.manager,
+                                                                            action_long_desc= "<p>Deseja mesmo remover a pergunta?</p>")
+                                if event.type == pygame_gui.UI_CONFIRMATION_DIALOG_CONFIRMED:
+                                    continuar = self.remover_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
+                                    if continuar == False:
+                                        return False
+                                    else:
+                                        run = False
                         elif event.ui_element == visualizar_botao:
                             pergunta_selecionada = perguntas.get_single_selection()
-                            if pergunta_selecionada is None:
+                            if pergunta_selecionada == None:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                          manager=self.tela.manager,
                                                                                          html_message="<p>Selecione uma pergunta</p>")
                             else:
                                 continuar = self.visualizar_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
-                            if not continuar:
-                                return False
+                                if continuar == False:
+                                    return False
+                                else:
+                                    run = False
+                        elif event.ui_element == editar_botao:
+                            pergunta_selecionada = perguntas.get_single_selection()
+                            if pergunta_selecionada == None:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>Selecione uma pergunta</p>")
                             else:
-                                run = False
+                                continuar = self.editar_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
+                                if continuar == False:
+                                    return False
+                                else:
+                                    run = False
                     self.tela.manager.process_events(event)
                 self.tela.manager.update(time_delta)
                 self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
@@ -341,3 +366,123 @@ class TelaPerguntas:
             pygame.display.flip()
         return True
     
+    def editar_pergunta(self,id_pergunta,id_grupo):
+        enunciado_e_tentativa = PerguntaAlternativasDAO.obter_enunciado_e_tentativa(id_pergunta, id_grupo)
+        self.enunciado = enunciado_e_tentativa["texto_enunciado"]
+        alternativas_tuplas = AlternativaDAO.obter_alternativas(id_pergunta, id_grupo)
+
+        for indice in range(len(alternativas_tuplas)):
+            if alternativas_tuplas[indice][1] == 1:
+                alternativas_tuplas[0], alternativas_tuplas[indice] = alternativas_tuplas[indice], alternativas_tuplas[0] # Caso a alternativa correta não seja a primeira 
+                break
+        self.alternativas = ["","","","",""]
+        for indice in range(len(alternativas_tuplas)):
+            self.alternativas[indice] = alternativas_tuplas[indice][0]
+        continuar = True
+        while continuar:
+            self.tela.manager.clear_and_reset()
+            BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
+            pygame.display.update()
+            caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((0, 415 * self.tela.proporcao_y),(1400 * self.tela.proporcao_x, 650 * self.tela.proporcao_y)),
+                                                    manager=self.tela.manager,
+                                                    anchors={"centerx":"centerx"})
+            voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-144 * self.tela.proporcao_x, 23), (120 * self.tela.proporcao_x, 80 * self.tela.proporcao_y)),
+                                                        text="",
+                                                        container=caixa_fundo,
+                                                        object_id=ObjectID(class_id="@botao_voltar_pequeno"),
+                                                        anchors={"right":"right"},
+                                                        manager=self.tela.manager)
+            enunciado_texto = pygame_gui.elements.UITextEntryBox(relative_rect=pygame.Rect((0, -75 * self.tela.proporcao_y),(1300 * self.tela.proporcao_x, 250 * self.tela.proporcao_y)),
+                                                                container=caixa_fundo,
+                                                                anchors={"centerx" : "centerx",
+                                                                        "centery":"centery"},
+                                                                manager=self.tela.manager)
+            alternativas = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((0,0),(1300 * self.tela.proporcao_x, 150 * self.tela.proporcao_y)),
+                                                                item_list=["Alternativa correta",
+                                                                        "Segunda alternativa",
+                                                                        "Terceira alternativa",
+                                                                        "Quarta alternativa",
+                                                                        "Quinta alternativa"],
+                                                                allow_multi_select=False,
+                                                                container=caixa_fundo,
+                                                                anchors={"centerx":"centerx",
+                                                                        "top_target" : enunciado_texto},
+                                                                manager=self.tela.manager)
+            cancelar_botao = pygame_gui.elements.UIButton(pygame.Rect((-112.5 * self.tela.proporcao_x, -60 * self.tela.proporcao_y),(325 * self.tela.proporcao_x, 65 * self.tela.proporcao_y)),
+                                                            text="Cancelar",
+                                                            container=caixa_fundo,
+                                                            anchors={"centerx":"centerx",
+                                                                    "bottom":"bottom"},
+                                                            manager=self.tela.manager)
+            confirmar_botao = pygame_gui.elements.UIButton(pygame.Rect((0, -60 * self.tela.proporcao_y),(325 * self.tela.proporcao_x, 65 * self.tela.proporcao_y)),
+                                                            text="Confirmar",
+                                                            container=caixa_fundo,
+                                                            anchors={"left_target":cancelar_botao,
+                                                                    "bottom":"bottom"},
+                                                            manager=self.tela.manager)
+            pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20 * self.tela.proporcao_x, 50 * self.tela.proporcao_y), (-1,-1)),
+                                        container=caixa_fundo,
+                                        anchors={"bottom_target" : enunciado_texto},
+                                        text="Digite o enunciado:",
+                                        manager=self.tela.manager)
+            enunciado_texto.focus()
+            clock = pygame.time.Clock()
+            run = True
+            enunciado_texto.set_text(self.enunciado)
+            while run:
+                time_delta = clock.tick(60) / 1000.00
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        return False
+                    elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+                        if event.ui_element == voltar_botao:
+                            return True
+                        elif event.ui_element == confirmar_botao:
+                            if enunciado_texto.get_text() == "":
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message="<p>É necessário preencher o enunciado</p>")
+                            elif len(enunciado_texto.get_text()) > 700:
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                         html_message=f"<p>O enunciado deve ter no máximo 700 caracteres</p><p>Tamanho atual: {len(enunciado_texto.get_text())} caracteres</p>")
+                            elif self.alternativas[0] == "":
+                                pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                         manager=self.tela.manager,
+                                                                                       html_message="<p>É necessário preencher a Alternativa Correta</p>")
+                            else:                                                           
+                                alternativas_preenchidas = [alt for alt in self.alternativas if alt != ""]
+                                if len(alternativas_preenchidas) < 2:
+                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                            manager=self.tela.manager,
+                                                                                            html_message="<p>Preencha pelo menos duas alternativas</p>")
+                                else:
+                                    PerguntaAlternativasDAO.editar_pergunta(id_pergunta, id_grupo, enunciado_texto.get_text(), self.alternativas)
+                                    self.alternativas = ["","","","",""]
+                                    self.enunciado = ""
+                                    enunciado_texto.set_text("")
+                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                            manager=self.tela.manager,
+                                                                                            html_message="<p>Pergunta editada</p>")
+                    elif event.type == pygame_gui.UI_TEXT_ENTRY_CHANGED:
+                        self.enunciado = enunciado_texto.get_text()
+                    elif event.type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
+                        if event.ui_element == alternativas:
+                            indice = int(alternativas.get_single_selection_start_percentage() * len(alternativas.item_list))
+                            texto = alternativas.get_single_selection()
+                            continuar = self.adicionar_alternativa(indice, texto)
+                            if continuar == False:
+                                return False
+                            else:
+                                run = False
+                    self.tela.manager.process_events(event)
+                self.tela.manager.update(time_delta)
+                self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
+                self.tela.manager.draw_ui(self.tela.WIN)
+                pygame.display.flip()
+        self.alternativas = ["","","","",""]
+        self.enunciado = ""
+        return True
+            
+    def remover_pergunta(self, id_pergunta, id_grupo):
+        PerguntaAlternativasDAO.remover_pergunta(id_pergunta, id_grupo)
