@@ -9,6 +9,8 @@ class TelaPerguntas:
         self.tela = tela
         self.alternativas = ["","","","",""]
         self.enunciado = ""
+        self.perguntas_alternativasdao = PerguntaAlternativasDAO()
+        self.alternativadao = AlternativaDAO()
     def mostrar_perguntas(self, usuario):
         continuar = True
         while continuar:
@@ -127,13 +129,15 @@ class TelaPerguntas:
         return True
     
     def obter_perguntas(self, usuario):
-        lista_de_perguntas = PerguntaAlternativasDAO.ver_previa_perguntas(usuario.id_grupo)
+        lista_de_perguntas = self.perguntas_alternativasdao.ver_previa_perguntas(usuario.id_grupo)
         lista_final = []
         for item in lista_de_perguntas:
             lista_final.append(f"{item[0]} - {item[1][:50]}")
         return lista_final
     
     def adicionar_perguntas(self, usuario):
+        self.alternativas = ["","","","",""]
+        self.enunciado = ""
         continuar = True
         while continuar:
             self.tela.manager.clear_and_reset()
@@ -213,7 +217,7 @@ class TelaPerguntas:
                                                                                             manager=self.tela.manager,
                                                                                             html_message="<p>Preencha pelo menos duas alternativas</p>")
                                 else:
-                                    PerguntaAlternativasDAO.adicionar_pergunta(usuario.id_grupo, enunciado_texto.get_text(), alternativas_preenchidas)
+                                    self.perguntas_alternativasdao.adicionar_pergunta(usuario.id_grupo, enunciado_texto.get_text(), alternativas_preenchidas)
                                     self.alternativas = ["","","","",""]
                                     self.enunciado = ""
                                     enunciado_texto.set_text("")
@@ -306,13 +310,13 @@ class TelaPerguntas:
         self.tela.manager.clear_and_reset()
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
 
-        enunciado_e_tentativa = PerguntaAlternativasDAO.obter_enunciado_e_tentativa(id_pergunta, id_grupo)
+        enunciado_e_tentativa = self.perguntas_alternativasdao.obter_enunciado_e_tentativa(id_pergunta, id_grupo)
 
         enunciado = enunciado_e_tentativa["texto_enunciado"]
         numero_tentativas = enunciado_e_tentativa["numero_tentativas"]
         numero_acertos = enunciado_e_tentativa["numero_acertos"]
 
-        alternativas = AlternativaDAO.obter_alternativas(id_pergunta, id_grupo)
+        alternativas = self.alternativadao.obter_alternativas(id_pergunta, id_grupo)
 
         texto_pergunta = f"<p>{enunciado}</p>"
         texto_pergunta += "<p></p>"
@@ -368,9 +372,9 @@ class TelaPerguntas:
         return True
     
     def editar_pergunta(self,id_pergunta,id_grupo):
-        enunciado_e_tentativa = PerguntaAlternativasDAO.obter_enunciado_e_tentativa(id_pergunta, id_grupo)
+        enunciado_e_tentativa = self.perguntas_alternativasdao.obter_enunciado_e_tentativa(id_pergunta, id_grupo)
         self.enunciado = enunciado_e_tentativa["texto_enunciado"]
-        alternativas_tuplas = AlternativaDAO.obter_alternativas(id_pergunta, id_grupo)
+        alternativas_tuplas = self.alternativadao.obter_alternativas(id_pergunta, id_grupo)
 
         for indice in range(len(alternativas_tuplas)):
             if alternativas_tuplas[indice][1] == 1:
@@ -458,7 +462,7 @@ class TelaPerguntas:
                                                                                             manager=self.tela.manager,
                                                                                             html_message="<p>Preencha pelo menos duas alternativas</p>")
                                 else:
-                                    PerguntaAlternativasDAO.editar_pergunta(id_pergunta, id_grupo, enunciado_texto.get_text(), self.alternativas)
+                                    self.perguntas_alternativasdao.editar_pergunta(id_pergunta, id_grupo, enunciado_texto.get_text(), self.alternativas)
                                     self.alternativas = ["","","","",""]
                                     self.enunciado = ""
                                     enunciado_texto.set_text("")
@@ -486,5 +490,5 @@ class TelaPerguntas:
         return True
             
     def remover_pergunta(self, id_pergunta, id_grupo):
-        PerguntaAlternativasDAO.remover_pergunta(id_pergunta, id_grupo)
+        self.perguntas_alternativasdao.remover_pergunta(id_pergunta, id_grupo)
         return True

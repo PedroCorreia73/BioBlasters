@@ -80,10 +80,12 @@ class Pergunta:
 class Perguntas:
     def __init__(self, id_grupo):
         self.id_grupo = id_grupo
+        self.perguntas_alternativasdao = PerguntaAlternativasDAO()
+        self.alternativadao = AlternativaDAO()
         self.obter_id_perguntas()
     
     def obter_id_perguntas(self):
-        lista_tuplas = PerguntaAlternativasDAO.obter_ids_perguntas(self.id_grupo)
+        lista_tuplas = self.perguntas_alternativasdao.obter_ids_perguntas(self.id_grupo)
         lista_ids = []
         for item in lista_tuplas:
             lista_ids.append(item[0])
@@ -94,8 +96,8 @@ class Perguntas:
             self.obter_id_perguntas()
         id_escolhido = choice(self.id_perguntas)
         self.id_perguntas.remove(id_escolhido)
-        enunciado_e_tentativa = PerguntaAlternativasDAO.obter_enunciado_e_tentativa(id_escolhido, self.id_grupo)
-        alternativas = AlternativaDAO.obter_alternativas(id_escolhido, self.id_grupo)
+        enunciado_e_tentativa = self.perguntas_alternativasdao.obter_enunciado_e_tentativa(id_escolhido, self.id_grupo)
+        alternativas = self.alternativadao.obter_alternativas(id_escolhido, self.id_grupo)
         shuffle(alternativas)
         pergunta = Pergunta(tela, enunciado_e_tentativa, alternativas)
         return pergunta.mostrar_pergunta()

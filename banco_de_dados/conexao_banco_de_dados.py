@@ -15,14 +15,14 @@ class Conexao:
         """Todas as funções que utilizam uma conexão com o banco de dados devem ter essa função como decorator.
         @consultar é responsável por abrir e fechar uma conexão com o banco de dados."""
         @wraps(func)
-        def criar_consulta(cls, *args):        
+        def criar_consulta(self, *args):        
             with mysql.connector.connect(**Conexao.banco_de_dados) as acessar_banco:
-                cls.consulta = acessar_banco.cursor()
+                consulta = acessar_banco.cursor()
                 if len(args) == 0:
-                    resultado = func(cls)   
+                    resultado = func(self, consulta)   
                 else:
-                    resultado = func(cls, args)
-                cls.consulta.close()
+                    resultado = func(self, consulta, args)
+                consulta.close()
                 acessar_banco.commit()
                 return resultado
         return criar_consulta

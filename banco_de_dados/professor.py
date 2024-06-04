@@ -1,48 +1,41 @@
 from banco_de_dados.conexao_banco_de_dados import Conexao
 
 class ProfessorDAO:
-    def __init__(self, usuario_professor, senha_professor, id_grupo):
+    def __init__(self, usuario_professor = None, senha_professor = None, id_grupo = None):
         self._usuario_professor = usuario_professor
         self._senha_professor = senha_professor
         self._id_grupo = id_grupo
 
-    @classmethod
     @Conexao.consultar
-    def ver_professores(cls):
+    def ver_professores(consulta):
         obter_perguntas = "SELECT * FROM Professor"
-        cls.consulta.execute(obter_perguntas)
-        resultado = cls.consulta.fetchall()
+        consulta.execute(obter_perguntas)
+        resultado = consulta.fetchall()
         return resultado
 
-    @classmethod
     @Conexao.consultar
-    def adicionar_professor(cls, args):
-        professor = args[0]
+    def adicionar_professor(self, consulta):
         adicionar_professor = "INSERT INTO Professor(usuario_professor, senha_professor, idGrupo) VALUES(%s,%s,%s)"
-        valores = (professor._usuario_professor, professor._senha_professor, professor._id_grupo)
-        cls.consulta.execute(adicionar_professor, valores)
-        professor._id_professor = cls.consulta.lastrowid
+        valores = (self._usuario_professor, self._senha_professor, self._id_grupo)
+        consulta.execute(adicionar_professor, valores)
+        self._id_professor = consulta.lastrowid
         return None
     
-    @classmethod
     @Conexao.consultar
-    def vincular_grupo(cls,args):
-        professor = args[0]
-        id_grupo = professor.id_grupo
-        id_professor = professor.id
+    def vincular_grupo(self, consulta, args):
+        id_grupo = args[0]
+        id_professor = args[1]
         vincular_grupo = "UPDATE Professor SET idGrupo = %s WHERE idProfessor = %s"
         valores = (id_grupo, id_professor)
-        cls.consulta.execute(vincular_grupo, valores)
+        consulta.execute(vincular_grupo, valores)
         return None
     
-    @classmethod
     @Conexao.consultar
-    def consulta_professor(cls,args):
-        professor = args[0]
+    def consulta_professor(self, consulta):
         consultar_professor = "SELECT * FROM Professor WHERE usuario_professor = %s"
-        valores = (professor._usuario_professor,)
-        cls.consulta.execute(consultar_professor, valores)
-        resultado = cls.consulta.fetchall()
+        valores = (self._usuario_professor,)
+        consulta.execute(consultar_professor, valores)
+        resultado = consulta.fetchall()
         return resultado
     
     @property

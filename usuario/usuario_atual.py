@@ -2,10 +2,10 @@ from abc import abstractmethod
 from abc import ABC
 
 class Usuario(ABC):
-    def __init__(self):
-        self._id_usuario = None
-        self._nome_usuario = None
-        self._senha_usuario = None
+    def __init__(self, nome_usuario = None, senha_usuario = None):
+        self._nome_usuario = nome_usuario
+        self._senha_usuario = senha_usuario
+
     @abstractmethod
     def entrar_menu():
         pass
@@ -30,9 +30,9 @@ class Usuario(ABC):
 
 
 class Aluno(Usuario):
-    def __init__(self):
-        super().__init__()
-        self._id_grupo = None
+    def __init__(self, nome_usuario = None, senha_usuario = None, id_grupo = None):
+        super().__init__(nome_usuario, senha_usuario)
+        self._id_grupo = id_grupo
     
     def entrar_menu(self, menu):
         return menu.aluno(self)
@@ -46,9 +46,9 @@ class Aluno(Usuario):
     
     
 class Professor(Usuario):
-    def __init__(self):
-        super().__init__()
-        self._id_grupo = None
+    def __init__(self, nome_usuario = None, senha_usuario = None, id_grupo = None):
+        super().__init__(nome_usuario, senha_usuario)
+        self._id_grupo = id_grupo
     def entrar_menu(self, menu):
         return menu.professor(self)
     @property
@@ -60,7 +60,7 @@ class Professor(Usuario):
     
 
 class Administrador(Usuario):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, nome_usuario = None, senha_usuario = None):
+        super().__init__(nome_usuario, senha_usuario)
     def entrar_menu(self, menu):
         return menu.administrador(self)

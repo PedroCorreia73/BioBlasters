@@ -6,12 +6,14 @@ from telas.tela_selecionar import TelaSelecionar
 
 def main():
     tela = TelaJogo() # inicializa a tela com as medidas da tela do usuário
+    tela_selecionar = TelaSelecionar(tela)
+    tela_autenticacao = TelaAutenticacao(tela)
     repetir = True
     while repetir:
-        usuario = TelaSelecionar.selecionar(tela)
+        usuario = tela_selecionar.selecionar()
         if usuario == None:
             break
-        repetir = TelaAutenticacao.autenticar(tela, usuario)
+        repetir = tela_autenticacao.autenticar(usuario)
 
     continuar = True
     menu = Menu(tela)

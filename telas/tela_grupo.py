@@ -9,6 +9,8 @@ class TelaGrupo:
     def __init__(self,tela, usuario):
         self.tela = tela
         self.usuario = usuario
+        self.alunodao = AlunoDAO()
+        self.professordao = ProfessorDAO()
         
     def entrar_grupo(self):
         self.tela.manager.clear_and_reset()
@@ -36,14 +38,15 @@ class TelaGrupo:
                     if event.ui_element == entrar_botao:
                         codigo = codigo_texto.get_text()
                         if codigo != None:
-                            grupo = GrupoDAO.procurar_grupo_por_codigo(codigo)
+                            grupodao = GrupoDAO()
+                            grupo = grupodao.procurar_grupo_por_codigo(codigo)
                             if len(grupo) == 0:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>O grupo não existe</p>')
                             else:
                                 self.usuario.id_grupo = grupo[0][0]
-                                AlunoDAO.vincular_grupo(self.usuario)
+                                self.alunodao.vincular_grupo(self.usuario.id_grupo, self.usuario.id)
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Bem vindo ao grupo: {grupo[0][1]}</p>')
@@ -92,11 +95,11 @@ class TelaGrupo:
                         codigo = codigo_grupo_texto.get_text()
                         if codigo != "" and nome != "":
                             grupo = GrupoDAO(nome, codigo)
-                            verificar = GrupoDAO.procurar_grupo(grupo)
+                            verificar = grupo.procurar_grupo()
                             if len(verificar) == 0:
-                                GrupoDAO.adicionar_grupo(grupo)
+                                grupo.adicionar_grupo()
                                 self.usuario.id_grupo = grupo.id
-                                ProfessorDAO.vincular_grupo(self.usuario)
+                                self.professordao.vincular_grupo(self.usuario.id_grupo, self.usuario.id)
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Grupo criado</p>')

@@ -4,22 +4,25 @@ from pygame_gui.core import ObjectID
 from usuario.usuario_atual import Aluno, Professor, Administrador
 
 class TelaSelecionar:
-    def selecionar(tela):
-        tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
+    def __init__(self,tela):
+        self.tela = tela
+
+    def selecionar(self):
+        self.tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         pygame.display.update()
-        aluno_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x - tela.tamanho_botao[0] , 500 * tela.proporcao_y), tela.tamanho_botao),
+        aluno_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * self.tela.proporcao_x - self.tela.tamanho_botao[0] , 500 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Aluno',
-                                             manager=tela.manager)
-        professor_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * tela.proporcao_x, 500 * tela.proporcao_y), tela.tamanho_botao),
+                                             manager=self.tela.manager)
+        professor_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1920 / 2 * self.tela.proporcao_x, 500 * self.tela.proporcao_y), self.tela.tamanho_botao),
                                              text='Professor',
-                                             manager=tela.manager)
-        administrador_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-180 * tela.proporcao_x,-150 * tela.proporcao_y), (200 * tela.proporcao_x , 150 * tela.proporcao_y)),
+                                             manager=self.tela.manager)
+        administrador_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((-180 * self.tela.proporcao_x,-150 * self.tela.proporcao_y), (200 * self.tela.proporcao_x , 150 * self.tela.proporcao_y)),
                                              text='',
                                              object_id=ObjectID(class_id="@botao_admin"),
                                              anchors={"bottom":"bottom",
                                                       "right":"right"},
-                                             manager=tela.manager)
+                                             manager=self.tela.manager)
         clock = pygame.time.Clock()
         run = True
         while run:
@@ -34,8 +37,8 @@ class TelaSelecionar:
                         return Professor()
                     elif event.ui_element == administrador_botao:
                         return Administrador()
-                tela.manager.process_events(event)
-            tela.manager.update(time_delta)
-            tela.WIN.blit(pygame.transform.scale(BG_INICIO, (tela.WIN.get_width(), tela.WIN.get_height())), (0, 0))
-            tela.manager.draw_ui(tela.WIN)
+                self.tela.manager.process_events(event)
+            self.tela.manager.update(time_delta)
+            self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
+            self.tela.manager.draw_ui(self.tela.WIN)
             pygame.display.flip()
