@@ -7,7 +7,7 @@ class AlunoDAO:
         self._id_grupo = id_grupo
 
     @Conexao.consultar
-    def ver_alunos(self, consulta):
+    def ver_todos_alunos(self, consulta):
         obter_alunos = "SELECT * FROM Aluno"
         consulta.execute(obter_alunos)
         resultado = consulta.fetchall()
@@ -37,7 +37,34 @@ class AlunoDAO:
         valores = (id_grupo, id_aluno)
         consulta.execute(vincular_grupo, valores)
         return None
+    
+    @Conexao.consultar
+    def ver_alunos_do_grupo(self, consulta, args):
+        id_grupo = args[0]
+        ver_alunos_do_grupo = "SELECT usuario_aluno FROM Aluno WHERE idGrupo = %s"
+        valores = (id_grupo,)
+        consulta.execute(ver_alunos_do_grupo,valores)
+        resultado = consulta.fetchall()
+        return resultado
         
+    @Conexao.consultar
+    def remover_aluno_do_grupo(self, consulta, args):
+        id_aluno = args[0]
+        remover_aluno_do_grupo = "UPDATE Aluno SET idGrupo = NULL WHERE idAluno = %s"
+        valores = (id_aluno,)
+        consulta.execute(remover_aluno_do_grupo, valores)
+        return None
+    
+    @Conexao.consultar 
+    def obter_id_aluno(self, consulta):
+        obter_id_aluno = "SELECT idAluno FROM Aluno WHERE usuario_aluno = %s"
+        valores = (self._usuario_aluno,)
+        consulta.execute(obter_id_aluno, valores)
+        resultado = consulta.fetchone()
+        return resultado
+
+   
+
     @property
     def id(self):
         return self._id_aluno

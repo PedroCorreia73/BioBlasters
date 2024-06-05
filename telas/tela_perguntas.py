@@ -71,7 +71,7 @@ class TelaPerguntas:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         return False
-                    if event.type == pygame_gui.UI_CONFIRMATION_DIALOG_CONFIRMED:
+                    elif event.type == pygame_gui.UI_CONFIRMATION_DIALOG_CONFIRMED:
                         if event.ui_element == remover_confirmacao:
                             continuar = self.remover_pergunta(pergunta_selecionada.split()[0], usuario.id_grupo)
                             if continuar == False:

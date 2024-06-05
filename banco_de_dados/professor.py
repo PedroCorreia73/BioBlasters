@@ -7,7 +7,7 @@ class ProfessorDAO:
         self._id_grupo = id_grupo
 
     @Conexao.consultar
-    def ver_professores(consulta):
+    def ver_todos_professores(consulta):
         obter_perguntas = "SELECT * FROM Professor"
         consulta.execute(obter_perguntas)
         resultado = consulta.fetchall()

@@ -20,8 +20,8 @@ class PerguntaAlternativasDAO:
         perguntadao = PerguntaDAO()
         tentativadao = TentativaDAO()
 
-        id_pergunta = self.obter_id_pergunta(consulta)
         id_grupo = args[0]
+        id_pergunta = self.obter_id_pergunta(consulta, id_grupo)
         enunciado = args[1]
         alternativas = args[2]
         id_enunciado = perguntadao.adicionar_enunciado(enunciado)
@@ -41,9 +41,9 @@ class PerguntaAlternativasDAO:
         consulta.executemany(adicionar_pergunta_alternativas,dados)
         return None
     
-    def obter_id_pergunta(self, cursor):
-        obter_id_pergunta = """SELECT MAX(idPerguntaAlternativas) FROM Pergunta_Alternativas"""
-        cursor.execute(obter_id_pergunta,)
+    def obter_id_pergunta(self, cursor, id_grupo):
+        obter_id_pergunta = """SELECT MAX(idPerguntaAlternativas) FROM Pergunta_Alternativas WHERE idGrupo = %s"""
+        cursor.execute(obter_id_pergunta, (id_grupo,))
         resultado = cursor.fetchall()
         if resultado[0][0] == None:
             return 1

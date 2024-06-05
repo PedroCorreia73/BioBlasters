@@ -3,6 +3,7 @@ import pygame_gui
 from telas.tela_jogar import TelaJogar
 from telas.tela_grupo import TelaGrupo
 from telas.tela_perguntas import TelaPerguntas
+from telas.tela_como_jogar import TelaComoJogar
 from telas.tela_ajustes import TelaAjustes
 from pygame_gui.core import ObjectID
 
@@ -38,7 +39,6 @@ class Menu:
         run = True
         while run:
             time_delta = clock.tick(60) / 1000.00
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -52,9 +52,16 @@ class Menu:
                             tela_jogar = TelaJogar(self.tela, usuario)
                             repetir = tela_jogar.jogar()
                             return repetir
+                    elif event.ui_element == como_jogar_botao:
+                        tela_como_jogar = TelaComoJogar(self.tela)
+                        repetir = tela_como_jogar.como_jogar()
+                        return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela, usuario)
-                        repetir = tela_grupo.entrar_grupo()
+                        if usuario.id_grupo == None:
+                            repetir = tela_grupo.entrar_grupo()
+                        else:
+                            repetir = tela_grupo.informacoes_grupo()
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
@@ -114,9 +121,16 @@ class Menu:
                             tela_jogar = TelaJogar(self.tela, usuario)
                             repetir = tela_jogar.jogar()
                             return repetir
+                    elif event.ui_element == como_jogar_botao:
+                        tela_como_jogar = TelaComoJogar(self.tela)
+                        repetir = tela_como_jogar.como_jogar()
+                        return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela, usuario)
-                        repetir = tela_grupo.criar_grupo()
+                        if usuario.id_grupo == None:
+                            repetir = tela_grupo.criar_grupo()
+                        else:
+                            repetir = tela_grupo.manter_grupo()
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)

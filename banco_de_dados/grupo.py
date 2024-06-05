@@ -40,6 +40,15 @@ class GrupoDAO:
         resultado = consulta.fetchall()
         return resultado
     
+    @Conexao.consultar
+    def mostrar_informacoes(self, consulta, args):
+        id_grupo = args[0]
+        mostrar_informacoes = "SELECT codigo_grupo, nome_grupo FROM Grupo WHERE idGrupo = %s"
+        valores = (id_grupo,)
+        consulta.execute(mostrar_informacoes,valores)
+        resultado = dict(zip(consulta.column_names, consulta.fetchone()))
+        return resultado
+       
 
     @property
     def id(self):
