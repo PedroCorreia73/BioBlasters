@@ -8,7 +8,7 @@ class AlunoDAO:
 
     @Conexao.consultar
     def ver_todos_alunos(self, consulta):
-        obter_alunos = "SELECT * FROM Aluno"
+        obter_alunos = "SELECT usuario_aluno, idGrupo FROM Aluno"
         consulta.execute(obter_alunos)
         resultado = consulta.fetchall()
         return resultado
@@ -53,6 +53,14 @@ class AlunoDAO:
         remover_aluno_do_grupo = "UPDATE Aluno SET idGrupo = NULL WHERE idAluno = %s"
         valores = (id_aluno,)
         consulta.execute(remover_aluno_do_grupo, valores)
+        return None
+    
+    @Conexao.consultar
+    def remover_aluno(self, consulta, args):
+        id_aluno = args[0]
+        remover_aluno = "DELETE FROM Aluno WHERE idAluno = %s"
+        valores = (id_aluno,)
+        consulta.execute(remover_aluno, valores)
         return None
     
     @Conexao.consultar 

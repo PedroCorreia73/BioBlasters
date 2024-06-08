@@ -7,8 +7,8 @@ class ProfessorDAO:
         self._id_grupo = id_grupo
 
     @Conexao.consultar
-    def ver_todos_professores(consulta):
-        obter_perguntas = "SELECT * FROM Professor"
+    def ver_todos_professores(self, consulta):
+        obter_perguntas = "SELECT usuario_professor, idGrupo FROM Professor"
         consulta.execute(obter_perguntas)
         resultado = consulta.fetchall()
         return resultado
@@ -38,6 +38,22 @@ class ProfessorDAO:
         resultado = consulta.fetchall()
         return resultado
     
+    @Conexao.consultar
+    def obter_id_professor(self, consulta):
+        obter_id_professor = "SELECT idProfessor FROM Professor WHERE usuario_professor = %s"
+        valores = (self._usuario_professor,)
+        consulta.execute(obter_id_professor, valores)
+        resultado = consulta.fetchone()
+        return resultado
+    
+    @Conexao.consultar
+    def remover_professor(self, consulta, args):
+        id_professor = args[0]
+        remover_professor = "DELETE FROM Professor WHERE idProfessor = %s"
+        valores = (id_professor,)
+        consulta.execute(remover_professor, valores)
+        return None
+
     @property
     def id(self):
         return self._id_professor
