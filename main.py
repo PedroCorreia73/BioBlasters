@@ -25,7 +25,7 @@ def main():
                 while continuar:
                     continuar = usuario.entrar_menu(menu)
         pygame.quit()
-    except:
+    except Exception:
         tela.manager.clear_and_reset()
         BG_INICIO = pygame.image.load("imagens/bgbg.png")
         mensagem = pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * tela.proporcao_x, 448 * tela.proporcao_y), (1009 * tela.proporcao_x, 472.95 * tela.proporcao_y)),

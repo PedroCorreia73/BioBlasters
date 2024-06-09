@@ -28,7 +28,7 @@ class TelaJogar():
         balas = Balas() # Iniciando coleção de balas que aparecem na tela
         perguntas = Perguntas(self.usuario.id_grupo) #Iniciando coleção de perguntas
 
-        hud_jogo = HUD(self.tela, nave) # Objeto responsável por gerar o HUD durante o jogo
+        hud_jogo = HUD(self.tela, nave, pontuacao) # Objeto responsável por gerar o HUD durante o jogo
         hud_jogo.gerar_elementos() # Gera os elementos do HUD
         self.tela.HEIGHT -= hud_jogo.HEIGHT # Faz com que nenhum objeto possa ultrapassar o HUD
 
@@ -77,6 +77,7 @@ class TelaJogar():
             #---------------------------------------------------------
             #movimentação de itens_pergunta
                 itens_pergunta.mover(nave)
+                hud_jogo.atualizar_informacoes() # Atualizar as informações que aparecem no HUD
 
             #caixa de pergunta
             else:
@@ -101,27 +102,54 @@ class TelaJogar():
             # Desenhar os elementos na tela
             self.tela.manager.update(aux_clock)
             self.tela.manager.draw_ui(self.tela.WIN)
-            self.tela.desenhar(nave, pontuacao, balas, itens_pergunta, obstaculos)
+            self.tela.desenhar(nave, balas, itens_pergunta, obstaculos)
 
         self.tela.HEIGHT += hud_jogo.HEIGHT #Retomando o tamanho da tela
         return False
     
 class HUD:
-    def __init__(self, tela, nave):
+    def __init__(self, tela, nave, pontuacao):
         self.tela = tela
         self.nave = nave
+        self.pontuacao = pontuacao
         
     def gerar_elementos(self):
-        self.hud_jogo = pygame_gui.elements.UIPanel(relative_rect= ((0, -100 * self.tela.proporcao_y), (self.tela.WIN.get_width(), 100 * self.tela.proporcao_y)),
+        bala = pygame.image.load("imagens/shot.png")
+        self.hud_jogo = pygame_gui.elements.UIPanel(relative_rect= pygame.Rect((0, -100 * self.tela.proporcao_y), (self.tela.WIN.get_width(), 100 * self.tela.proporcao_y)),
                                         manager=self.tela.manager,
                                         object_id=ObjectID(class_id="@hud"),
                                         anchors={"bottom":"bottom"})
-        self.vida_nave = pygame_gui.elements.UIStatusBar(relative_rect=((100 * self.tela.proporcao_x , 10), (500 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
+        self.vida_nave = pygame_gui.elements.UIStatusBar(relative_rect=pygame.Rect((100 * self.tela.proporcao_x , 10), (500 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
                                                 percent_method= lambda : self.nave.hp / 100,
                                                 container=self.hud_jogo,
                                                 manager= self.tela.manager,
                                                 anchors={"centery":"centery"})
+        
+        self.bala = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((50 * self.tela.proporcao_x, 10 * self.tela.proporcao_y), (50 * self.tela.proporcao_x, 50 * self.tela.proporcao_y)),
+                                    image_surface= bala,
+                                    container = self.hud_jogo,
+                                    manager=self.tela.manager,
+                                    anchors={"centery":"centery",
+                                             "left_target" : self.vida_nave})
+        
+        self.quantidade_balas = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((20 * self.tela.proporcao_x, 10 * self.tela.proporcao_y), (-1,-1)),
+                                    text=f"x {len(self.nave.mochila_balas)}",
+                                    container=self.hud_jogo,
+                                    manager=self.tela.manager,
+                                    anchors={"left_target": self.bala,
+                                             "centery":"centery"})
+        self.pontuacao_texto = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((300 * self.tela.proporcao_x, 10 * self.tela.proporcao_y), (-1,-1)),
+                                        text=f"Pontuação: {self.pontuacao.atual}",
+                                        container=self.hud_jogo,
+                                        manager=self.tela.manager,
+                                        anchors={"left_target" : self.quantidade_balas,
+                                                "centery":"centery"})
         self.HEIGHT = self.hud_jogo.get_relative_rect().height
+    
+    def atualizar_informacoes(self):
+        self.quantidade_balas.set_text(f"x {len(self.nave.mochila_balas)}")
+        self.pontuacao_texto.set_text(f"Pontuação: {self.pontuacao.atual}")
+
 
 class TelaDerrota:
     def __init__(self, tela):
