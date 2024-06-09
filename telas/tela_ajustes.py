@@ -152,7 +152,7 @@ class TelaAjustes:
                         run = False
                     elif event.ui_element == confirmar_botao:
                         nova_senha = nova_senha_texto.get_text()
-                        if len(nova_senha) >= 6:
+                        if len(nova_senha) >= 4:
                             if nova_senha == usuario.senha:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                             manager=self.tela.manager,
@@ -173,7 +173,7 @@ class TelaAjustes:
                         else:
                             pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                             manager=self.tela.manager,
-                                                                                            html_message='<p>A senha deve possuir pelo menos 6 caracteres</p>')    
+                                                                                            html_message='<p>A senha deve possuir pelo menos 4 caracteres</p>')    
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))

@@ -128,7 +128,7 @@ class TelaAutenticacao:
                                     if not self.verificar_senha(senha_usuario):
                                         pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
-                                                                                        html_message='<p>A senha deve possuir pelo menos 6 caracteres</p>')  
+                                                                                        html_message='<p>A senha deve possuir pelo menos 4 caracteres</p>')  
                                     else:
                                         aluno.adicionar_aluno()
                                         pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
@@ -153,7 +153,7 @@ class TelaAutenticacao:
                                     if not self.verificar_senha(senha_usuario):
                                         pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
-                                                                                        html_message='<p>A senha deve possuir pelo menos 6 caracteres</p>')  
+                                                                                        html_message='<p>A senha deve possuir pelo menos 4 caracteres</p>')  
                                     else: 
                                         professor.adicionar_professor()
                                         pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
@@ -203,5 +203,5 @@ class TelaAutenticacao:
                 return False
             
     def verificar_senha(self, senha):
-        return len(senha) >= 6
+        return len(senha) >= 4
 
