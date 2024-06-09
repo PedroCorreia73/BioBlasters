@@ -56,9 +56,6 @@ class TelaJogar():
                 obstaculos.gerar(self.tela)
                 if not keys_teclado[pygame.K_SPACE]:
                     Bala.aux_bala = 0
-            # Sistema TEMPORÁRIO de coleta de balas
-                if keys_teclado[pygame.K_c]:
-                    nave.mochila_balas.append(1)
             # Sistema de spawn de balas
                 balas.gerar(nave, keys_teclado)
             #movimentação de balas
@@ -92,6 +89,7 @@ class TelaJogar():
                 nave.pegou_item_pergunta = False
                 if acertou:
                     pontuacao.ganha += 400 # Aumenta a pontuação caso o usuário tenha acertado a pergunta
+                    nave.mochila_balas.append(1)
                 nave.invencibilidade = True # Permite que o usuário fique invencível durante um tempo
                 nave.tempo_invencibilidade = time.time() + 1
 

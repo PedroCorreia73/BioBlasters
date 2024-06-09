@@ -4,7 +4,7 @@ import pygame_gui
 from pygame_gui.core.object_id import ObjectID
 import pygame_gui.elements.ui_window
 import pygame_gui.windows.ui_message_window
-from banco_de_dados.pergunta import PerguntaAlternativasDAO, AlternativaDAO
+from banco_de_dados.pergunta import PerguntaAlternativasDAO, AlternativaDAO, TentativaDAO
 
 
 class Pergunta:
@@ -13,6 +13,7 @@ class Pergunta:
         self.enunciado = pergunta["texto_enunciado"]
         self.numero_tentativas = pergunta["numero_tentativas"]
         self.numero_acertos = pergunta["numero_acertos"]
+        self.id_tentativa = pergunta["idTentativa"]
         self.alternativas = alternativas
 
     def mostrar_pergunta(self):
@@ -64,16 +65,21 @@ class Pergunta:
             pygame.display.flip()
 
     def verificar_resposta(self, indice):
+        tentativadao = TentativaDAO()
+        self.numero_tentativas += 1
         if self.alternativas[indice][1] == 1:
             mensagem = pygame_gui.windows.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Resposta Correta</p>')
+            self.numero_acertos += 1
+            tentativadao.atualizar_tentativas(self.id_tentativa, self.numero_tentativas, True, self.numero_acertos)
             mensagem.set_blocking(True)
             return True
         else:
             mensagem = pygame_gui.windows.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Resposta Incorreta</p>')
+            tentativadao.atualizar_tentativas(self.id_tentativa, self.numero_tentativas, False)
             mensagem.set_blocking(True)
             return False
 

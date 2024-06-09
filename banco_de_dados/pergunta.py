@@ -66,7 +66,8 @@ class PerguntaAlternativasDAO:
         id_pergunta_alternativas = args[0]
         id_grupo = args[1]
         obter_enunciado_e_tentativa = """SELECT idPerguntaAlternativas, ANY_VALUE(texto_enunciado) AS texto_enunciado, 
-                                                ANY_VALUE(numero_tentativas) AS numero_tentativas, ANY_VALUE(numero_acertos) AS numero_acertos
+                                                ANY_VALUE(numero_tentativas) AS numero_tentativas, ANY_VALUE(numero_acertos) AS numero_acertos,
+                                                ANY_VALUE(pa.idTentativa) AS idTentativa
                             FROM Pergunta_Alternativas AS pa INNER JOIN Pergunta AS p
                                                         ON pa.idPergunta = p.idPergunta
                                                         INNER JOIN Tentativa AS t
@@ -180,5 +181,23 @@ class TentativaDAO:
         consulta.execute(criar_tentativas, valores)
         id_tentativa = consulta.lastrowid
         return id_tentativa
+    
+    @Conexao.consultar
+    def atualizar_tentativas(self, consulta, args):
+        id_tentativa = args[0]
+        numero_tentativas = args[1]
+        acertou = args[2]
+        if acertou == True:
+            numero_acertos = args[3]
+            atualizar_acertos = "UPDATE Tentativa SET numero_tentativas = %s, numero_acertos = %s WHERE idTentativa = %s"
+            valores = (numero_tentativas, numero_acertos, id_tentativa)
+            consulta.execute(atualizar_acertos, valores)
+            return None
+        else:
+            atualizar_tentativas = "UPDATE Tentativa SET numero_tentativas = %s WHERE idTentativa = %s"
+            valores = (numero_tentativas, id_tentativa)
+            consulta.execute(atualizar_tentativas, valores)
+            return None
+
     
     

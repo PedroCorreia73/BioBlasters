@@ -22,5 +22,6 @@ def main():
             while continuar:
                 continuar = usuario.entrar_menu(menu)
     pygame.quit()
+    
 if __name__ == "__main__":
     main()
