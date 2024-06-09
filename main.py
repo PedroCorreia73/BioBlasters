@@ -21,6 +21,6 @@ def main():
         if usuario.nome != None:
             while continuar:
                 continuar = usuario.entrar_menu(menu)
-    pygame.quit
+    pygame.quit()
 if __name__ == "__main__":
     main()

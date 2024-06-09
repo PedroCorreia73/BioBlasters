@@ -53,6 +53,16 @@ class ProfessorDAO:
         valores = (id_professor,)
         consulta.execute(remover_professor, valores)
         return None
+    
+    @Conexao.consultar
+    def atualizar_pontuacao(self, consulta, args):
+        id_professor = args[0]
+        pontuacao_da_jogada = args[1]
+        atualizar_pontuacao = "UPDATE Professor SET maior_pontuacao_professor = %s WHERE idProfessor = %s"
+        valores = (pontuacao_da_jogada, id_professor)
+        consulta.execute(atualizar_pontuacao, valores)
+        resultado = consulta.fetchone()
+        return resultado
 
     @property
     def id(self):

@@ -2,6 +2,9 @@ import pygame
 import pygame_gui
 from pygame_gui.core import ObjectID
 import time
+from usuario.usuario_atual import Aluno, Professor
+from banco_de_dados.aluno import AlunoDAO
+from banco_de_dados.professor import ProfessorDAO
 from classes.obstaculo import Obstaculos
 from classes.nave import Nave
 from classes.bala import Bala, Balas
@@ -70,7 +73,10 @@ class TelaJogar():
             #-------------------hit de obstáculos-------------------
                 continuar_jogo = nave.colidir(self.tela) # nave.colidir() retorna se o jogo deve continuar baseado na vida da nave
                 if not continuar_jogo:
-                    return True
+                    self.tela.HEIGHT += hud_jogo.HEIGHT #Retomando o tamanho da tela
+                    tela_derrota = TelaDerrota(self.tela)
+                    continuar = tela_derrota.mostrar(self.usuario, pontuacao)
+                    return continuar
             #---------------------------------------------------------
             #movimentação de itens_pergunta
                 itens_pergunta.mover(nave)
@@ -99,7 +105,7 @@ class TelaJogar():
             self.tela.manager.draw_ui(self.tela.WIN)
             self.tela.desenhar(nave, pontuacao, balas, itens_pergunta, obstaculos)
 
-            
+        self.tela.HEIGHT += hud_jogo.HEIGHT #Retomando o tamanho da tela
         return False
     
 class HUD:
@@ -118,3 +124,68 @@ class HUD:
                                                 manager= self.tela.manager,
                                                 anchors={"centery":"centery"})
         self.HEIGHT = self.hud_jogo.get_relative_rect().height
+
+class TelaDerrota:
+    def __init__(self, tela):
+        self.tela = tela
+
+    def mostrar(self, usuario, pontuacao):
+        self.tela.manager.clear_and_reset()
+        BG_INICIO = pygame.image.load("imagens/bgbg.png")
+        caixa_fundo = pygame_gui.elements.UIPanel(relative_rect=pygame.Rect((0, 0),(1400 * self.tela.proporcao_x, 650 * self.tela.proporcao_y)),
+                                                    manager=self.tela.manager,
+                                                    anchors={"centerx" : "centerx",
+                                                             "centery" : "centery"})
+        pygame.display.update()
+        texto = "<p>Você perdeu!</p>"
+        if isinstance(usuario, Aluno):
+            alunodao = AlunoDAO()
+            if pontuacao.atual > usuario.pontuacao: 
+                alunodao.atualizar_pontuacao(usuario.id, pontuacao.atual)
+                texto += f"<p>Parabéns! Sua pontuação aumentou para: {pontuacao.atual}</p>"
+                texto += f"<p>Antes era: {usuario.pontuacao}</p>"
+                usuario.pontuacao = pontuacao.atual
+            else:
+                texto += f"Sua maior pontuação continua sendo: {usuario.pontuacao}"
+        elif isinstance(usuario, Professor):
+            professordao = ProfessorDAO()
+            if pontuacao.atual > usuario.pontuacao: 
+                professordao.atualizar_pontuacao(usuario.id, pontuacao.atual)
+                texto += f"<p>Parabéns! Sua pontuação aumentou para: {pontuacao.atual}</p>"
+                texto += f"<p>Antes era: {usuario.pontuacao}</p>"
+                usuario.pontuacao = pontuacao.atual
+            else:
+                texto += f"Sua maior pontuação continua sendo: {usuario.pontuacao}"
+
+        caixa_texto = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((0, -75 * self.tela.proporcao_y),(1300 * self.tela.proporcao_x, 250 * self.tela.proporcao_y)),
+                                                             html_text=texto,
+                                                             container=caixa_fundo,
+                                                             anchors={"centerx" : "centerx",
+                                                                      "centery":"centery"},
+                                                             manager=self.tela.manager)
+        voltar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, -60 * self.tela.proporcao_y),(-1, -1)),
+                                                        text="Voltar ao Menu Principal",
+                                                        container=caixa_fundo,
+                                                        anchors={"centerx" : "centerx",
+                                                                    "bottom":"bottom"},
+                                                        manager=self.tela.manager)
+        
+        clock = pygame.time.Clock()
+        run = True
+        while run:
+            time_delta = clock.tick(60) / 1000.00
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return False
+                elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == voltar_botao:
+                        return True
+                self.tela.manager.process_events(event)
+            # Desenhar os elementos na tela
+            self.tela.manager.update(time_delta)
+            self.tela.manager.draw_ui(self.tela.WIN)
+            pygame.display.flip()
+        return False
+
+        
+        

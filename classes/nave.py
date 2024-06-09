@@ -8,7 +8,7 @@ class Nave(pygame.Rect):
         self.vel = 0
         self.WIDTH = 35
         self.HEIGHT = 35
-        self.hp = 100
+        self.hp = 20
         self.invencibilidade = False
         self.aux_inv = 100
         self.colidiu_obstaculo = False
@@ -60,9 +60,5 @@ class Nave(pygame.Rect):
         if self.invencibilidade:
             self.aux_inv += 1
         if self.hp <= 0:
-            lost_text = tela.FONT.render("Você perdeu!", 1, "blue")
-            tela.WIN.blit(lost_text, (tela.WIDTH / 2 - lost_text.get_width() / 2, tela.HEIGHT / 2 - lost_text.get_height() / 2))
-            pygame.display.update()
-            pygame.time.delay(1000)  # 1000 milisegundos
             return False
         return True

@@ -70,8 +70,17 @@ class AlunoDAO:
         consulta.execute(obter_id_aluno, valores)
         resultado = consulta.fetchone()
         return resultado
-
-   
+    
+    @Conexao.consultar
+    def atualizar_pontuacao(self, consulta, args):
+        id_aluno = args[0]
+        pontuacao_da_jogada = args[1]
+        atualizar_pontuacao = "UPDATE Aluno SET maior_pontuacao_aluno = %s WHERE idAluno = %s"
+        valores = (pontuacao_da_jogada, id_aluno)
+        consulta.execute(atualizar_pontuacao, valores)
+        resultado = consulta.fetchone()
+        return resultado
+        
 
     @property
     def id(self):

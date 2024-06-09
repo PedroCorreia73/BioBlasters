@@ -2,9 +2,9 @@ from abc import abstractmethod
 from abc import ABC
 
 class Usuario(ABC):
-    def __init__(self, nome_usuario = None, senha_usuario = None):
-        self._nome_usuario = nome_usuario
-        self._senha_usuario = senha_usuario
+    def __init__(self):
+        self._nome_usuario = None
+        self._senha_usuario = None
 
     @abstractmethod
     def entrar_menu():
@@ -30,9 +30,10 @@ class Usuario(ABC):
 
 
 class Aluno(Usuario):
-    def __init__(self, nome_usuario = None, senha_usuario = None, id_grupo = None):
-        super().__init__(nome_usuario, senha_usuario)
-        self._id_grupo = id_grupo
+    def __init__(self):
+        super().__init__()
+        self._id_grupo = None
+        self._pontuacao = None
     
     def entrar_menu(self, menu):
         return menu.aluno(self)
@@ -42,13 +43,21 @@ class Aluno(Usuario):
     @id_grupo.setter
     def id_grupo(self, novo_id):
         self._id_grupo = novo_id
-    
+
+    @property
+    def pontuacao(self):
+        return self._pontuacao
+    @pontuacao.setter
+    def pontuacao(self, nova_pontuacao):
+        self._pontuacao = nova_pontuacao
     
     
 class Professor(Usuario):
-    def __init__(self, nome_usuario = None, senha_usuario = None, id_grupo = None):
-        super().__init__(nome_usuario, senha_usuario)
-        self._id_grupo = id_grupo
+    def __init__(self):
+        super().__init__()
+        self._id_grupo = None
+        self._pontuacao = None
+
     def entrar_menu(self, menu):
         return menu.professor(self)
     @property
@@ -57,10 +66,18 @@ class Professor(Usuario):
     @id_grupo.setter
     def id_grupo(self, novo_id):
         self._id_grupo = novo_id
+
+    @property
+    def pontuacao(self):
+        return self._pontuacao
+    @pontuacao.setter
+    def pontuacao(self, nova_pontuacao):
+        self._pontuacao = nova_pontuacao
     
 
 class Administrador(Usuario):
-    def __init__(self, nome_usuario = None, senha_usuario = None):
-        super().__init__(nome_usuario, senha_usuario)
+    def __init__(self):
+        super().__init__()
+
     def entrar_menu(self, menu):
         return menu.administrador(self)

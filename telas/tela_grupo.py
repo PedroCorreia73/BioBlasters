@@ -247,7 +247,7 @@ class TelaGrupo:
                                                              "top_target":nome_usuario},
                                                     manager=self.tela.manager)
         pontuacao_maxima = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((0,20 *self.tela.proporcao_y),(-1,-1)),
-                                                       text=f"Pontuação máxima: ",
+                                                       text=f"Pontuação máxima: {self.usuario.pontuacao}",
                                                         container=caixa_dentro,
                                                         anchors={"centerx" : "centerx",
                                                                  "top_target":senha_usuario},
