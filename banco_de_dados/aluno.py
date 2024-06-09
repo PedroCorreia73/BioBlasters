@@ -80,6 +80,15 @@ class AlunoDAO:
         consulta.execute(atualizar_pontuacao, valores)
         resultado = consulta.fetchone()
         return resultado
+    
+    @Conexao.consultar
+    def alterar_senha(self, consulta, args):
+        id_aluno = args[0]
+        nova_senha = args[1]
+        alterar_senha = "UPDATE Aluno SET senha_aluno = %s WHERE idAluno = %s"
+        valores = (nova_senha, id_aluno)
+        consulta.execute(alterar_senha, valores)
+        return None
         
 
     @property

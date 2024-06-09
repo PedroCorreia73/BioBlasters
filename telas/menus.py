@@ -66,7 +66,7 @@ class Menu:
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
-                        repetir = tela_ajustes.ajustes()
+                        repetir = tela_ajustes.ajustes(usuario)
                         return repetir
                     elif event.ui_element == sair_botao:
                         run = False
@@ -135,7 +135,7 @@ class Menu:
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
-                        repetir = tela_ajustes.ajustes()
+                        repetir = tela_ajustes.ajustes(usuario)
                         return repetir
                     elif event.ui_element == perguntas_botao:
                         if usuario.id_grupo == None:

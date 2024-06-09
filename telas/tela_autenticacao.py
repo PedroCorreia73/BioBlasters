@@ -125,17 +125,22 @@ class TelaAutenticacao:
                                 aluno = AlunoDAO(nome_usuario, senha_usuario, None)
                                 verificar = aluno.consulta_aluno()
                                 if len(verificar) == 0:
-                                    aluno.adicionar_aluno()
-                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
-                                                                                         manager=self.tela.manager,
-                                                                                         html_message="<p>Usuário cadastrado!</p>")
+                                    if not self.verificar_senha(senha_usuario):
+                                        pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                        manager=self.tela.manager,
+                                                                                        html_message='<p>A senha deve possuir pelo menos 6 caracteres</p>')  
+                                    else:
+                                        aluno.adicionar_aluno()
+                                        pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                            manager=self.tela.manager,
+                                                                                            html_message="<p>Usuário cadastrado!</p>")
                                 else:
                                     usuario_texto.set_text("")
                                     senha_texto.set_text("")
                                     senha_texto.set_text_hidden(is_hidden=False)
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
-                                                                                         manager=self.tela.manager,
-                                                                                         html_message="<p>Usuário já cadastrado!</p>")
+                                                                                        manager=self.tela.manager,
+                                                                                        html_message="<p>Usuário já cadastrado!</p>")
                             else:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
@@ -145,21 +150,26 @@ class TelaAutenticacao:
                                 professor = ProfessorDAO(nome_usuario, senha_usuario, None)
                                 verificar = professor.consulta_professor()
                                 if len(verificar) == 0:
-                                    professor.adicionar_professor()
-                                    pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
-                                                                                         manager=self.tela.manager,
-                                                                                         html_message="<p>Usuário cadastrado!</p>")
+                                    if not self.verificar_senha(senha_usuario):
+                                        pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                        manager=self.tela.manager,
+                                                                                        html_message='<p>A senha deve possuir pelo menos 6 caracteres</p>')  
+                                    else: 
+                                        professor.adicionar_professor()
+                                        pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
+                                                                                        manager=self.tela.manager,
+                                                                                        html_message="<p>Usuário cadastrado!</p>")
                                 else:
                                     usuario_texto.set_text("")
                                     senha_texto.set_text("")
                                     senha_texto.set_text_hidden(is_hidden=False)
                                     pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
-                                                                                         manager=self.tela.manager,
-                                                                                         html_message="<p>Usuário já cadastrado!</p>")
+                                                                                        manager=self.tela.manager,
+                                                                                        html_message="<p>Usuário já cadastrado!</p>")
                             else:
                                 pygame_gui.windows.ui_message_window.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
-                                                                                        html_message='<p>O email deve possuir "@jpiaget.pro.br"</p>')                             
+                                                                                        html_message='<p>O email deve possuir "@jpiaget.pro.br"</p>')                     
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
@@ -191,4 +201,7 @@ class TelaAutenticacao:
                 return True
             else:
                 return False
+            
+    def verificar_senha(self, senha):
+        return len(senha) >= 6
 
