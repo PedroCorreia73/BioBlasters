@@ -4,7 +4,7 @@ import pygame_gui
 from pygame_gui.core.object_id import ObjectID
 import pygame_gui.elements.ui_window
 import pygame_gui.windows.ui_message_window
-from banco_de_dados.pergunta import PerguntaAlternativasDAO, AlternativaDAO
+from banco_de_dados.pergunta import PerguntaAlternativasDAO, AlternativaDAO, TentativaDAO
 
 
 class Pergunta:
@@ -13,6 +13,7 @@ class Pergunta:
         self.enunciado = pergunta["texto_enunciado"]
         self.numero_tentativas = pergunta["numero_tentativas"]
         self.numero_acertos = pergunta["numero_acertos"]
+        self.id_tentativa = pergunta["idTentativa"]
         self.alternativas = alternativas
 
     def mostrar_pergunta(self):
@@ -64,26 +65,33 @@ class Pergunta:
             pygame.display.flip()
 
     def verificar_resposta(self, indice):
+        tentativadao = TentativaDAO()
+        self.numero_tentativas += 1
         if self.alternativas[indice][1] == 1:
             mensagem = pygame_gui.windows.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Resposta Correta</p>')
+            self.numero_acertos += 1
+            tentativadao.atualizar_tentativas(self.id_tentativa, self.numero_tentativas, True, self.numero_acertos)
             mensagem.set_blocking(True)
             return True
         else:
             mensagem = pygame_gui.windows.UIMessageWindow(rect=((456 * self.tela.proporcao_x, 448 * self.tela.proporcao_y), (1009 * self.tela.proporcao_x, 472.95 * self.tela.proporcao_y)),
                                                                                         manager=self.tela.manager,
                                                                                         html_message=f'<p>Resposta Incorreta</p>')
+            tentativadao.atualizar_tentativas(self.id_tentativa, self.numero_tentativas, False)
             mensagem.set_blocking(True)
             return False
 
 class Perguntas:
     def __init__(self, id_grupo):
         self.id_grupo = id_grupo
+        self.perguntas_alternativasdao = PerguntaAlternativasDAO()
+        self.alternativadao = AlternativaDAO()
         self.obter_id_perguntas()
     
     def obter_id_perguntas(self):
-        lista_tuplas = PerguntaAlternativasDAO.obter_ids_perguntas(self.id_grupo)
+        lista_tuplas = self.perguntas_alternativasdao.obter_ids_perguntas(self.id_grupo)
         lista_ids = []
         for item in lista_tuplas:
             lista_ids.append(item[0])
@@ -94,8 +102,8 @@ class Perguntas:
             self.obter_id_perguntas()
         id_escolhido = choice(self.id_perguntas)
         self.id_perguntas.remove(id_escolhido)
-        enunciado_e_tentativa = PerguntaAlternativasDAO.obter_enunciado_e_tentativa(id_escolhido, self.id_grupo)
-        alternativas = AlternativaDAO.obter_alternativas(id_escolhido, self.id_grupo)
+        enunciado_e_tentativa = self.perguntas_alternativasdao.obter_enunciado_e_tentativa(id_escolhido, self.id_grupo)
+        alternativas = self.alternativadao.obter_alternativas(id_escolhido, self.id_grupo)
         shuffle(alternativas)
         pergunta = Pergunta(tela, enunciado_e_tentativa, alternativas)
         return pergunta.mostrar_pergunta()

@@ -2,7 +2,6 @@ import pygame
 import pygame_gui
 import math
 import json
-from classes.obstaculo import Obstaculo, Obstaculos
 from classes.item_pergunta import ItemPergunta
 from time import time
 
@@ -35,11 +34,7 @@ class TelaJogo:
         self.manager = pygame_gui.UIManager((self.WIN.get_size()), theme_path= tema,enable_live_theme_updates=False)
 
 
-    def desenhar(self, nave, pontuacao, balas, itens_pergunta, obstaculos):
-        
-        pontuacao_text = self.FONT.render(f"Pontuação: {pontuacao.atual}", 1, "white")
-        self.WIN.blit(pontuacao_text, (200, 10))
-
+    def desenhar(self, nave, balas, itens_pergunta, obstaculos):   
         #rotação da nave, carregamento da imagem na tela e piscadinha
         NAVE2 = pygame.transform.rotate(nave.gerar_imagem(), -nave.vel * 10)      
         if nave.invencibilidade:

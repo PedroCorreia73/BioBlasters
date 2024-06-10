@@ -1,51 +1,54 @@
 from banco_de_dados.conexao_banco_de_dados import Conexao
 
 class GrupoDAO:
-    def __init__(self, nome_grupo, codigo_grupo):
+    def __init__(self, nome_grupo = None, codigo_grupo = None):
         self._nome_grupo = nome_grupo
         self._codigo_grupo = codigo_grupo
 
 
-    @classmethod
     @Conexao.consultar
-    def ver_grupos(cls):
+    def ver_grupos(self, consulta):
         obter_perguntas = "SELECT * FROM Grupo"
-        cls.consulta.execute(obter_perguntas)
-        resultado = cls.consulta.fetchall()
+        consulta.execute(obter_perguntas)
+        resultado = consulta.fetchall()
         return resultado
 
-    @classmethod
     @Conexao.consultar
-    def adicionar_grupo(cls, args):
-        grupo = args[0]
+    def adicionar_grupo(self, consulta):
         adicionar_grupo = "INSERT INTO Grupo(nome_grupo, codigo_grupo) VALUES(%s, %s)"
-        valores = (grupo._nome_grupo, grupo._codigo_grupo)
-        cls.consulta.execute(adicionar_grupo, valores)
-        grupo._id_grupo = cls.consulta.lastrowid
+        valores = (self._nome_grupo, self._codigo_grupo)
+        consulta.execute(adicionar_grupo, valores)
+        self._id_grupo = consulta.lastrowid
         return None
     
-    @classmethod
     @Conexao.consultar
-    def procurar_grupo(cls, args):
-        grupo = args[0]
-        nome_grupo = grupo._nome_grupo
-        codigo_grupo = grupo._codigo_grupo
+    def procurar_grupo(self, consulta):
+        nome_grupo = self._nome_grupo
+        codigo_grupo = self._codigo_grupo
         procurar = "SELECT * FROM Grupo WHERE codigo_grupo = %s OR nome_grupo = %s"
         valores = (codigo_grupo, nome_grupo)
-        cls.consulta.execute(procurar, valores)
-        resultado = cls.consulta.fetchall()
+        consulta.execute(procurar, valores)
+        resultado = consulta.fetchall()
         return resultado
     
-    @classmethod
     @Conexao.consultar
-    def procurar_grupo_por_codigo(cls, args):
+    def procurar_grupo_por_codigo(self, consulta, args):
         codigo = args[0]
         procurar = "SELECT * FROM Grupo WHERE codigo_grupo = %s"
         valores = (codigo,)
-        cls.consulta.execute(procurar, valores)
-        resultado = cls.consulta.fetchall()
+        consulta.execute(procurar, valores)
+        resultado = consulta.fetchall()
         return resultado
     
+    @Conexao.consultar
+    def mostrar_informacoes(self, consulta, args):
+        id_grupo = args[0]
+        mostrar_informacoes = "SELECT codigo_grupo, nome_grupo FROM Grupo WHERE idGrupo = %s"
+        valores = (id_grupo,)
+        consulta.execute(mostrar_informacoes,valores)
+        resultado = dict(zip(consulta.column_names, consulta.fetchone()))
+        return resultado
+       
 
     @property
     def id(self):

@@ -3,7 +3,9 @@ import pygame_gui
 from telas.tela_jogar import TelaJogar
 from telas.tela_grupo import TelaGrupo
 from telas.tela_perguntas import TelaPerguntas
+from telas.tela_como_jogar import TelaComoJogar
 from telas.tela_ajustes import TelaAjustes
+from telas.tela_admin import TelaAdmin
 from pygame_gui.core import ObjectID
 
 class Menu:
@@ -38,7 +40,6 @@ class Menu:
         run = True
         while run:
             time_delta = clock.tick(60) / 1000.00
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -52,13 +53,20 @@ class Menu:
                             tela_jogar = TelaJogar(self.tela, usuario)
                             repetir = tela_jogar.jogar()
                             return repetir
+                    elif event.ui_element == como_jogar_botao:
+                        tela_como_jogar = TelaComoJogar(self.tela)
+                        repetir = tela_como_jogar.como_jogar()
+                        return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela, usuario)
-                        repetir = tela_grupo.entrar_grupo()
+                        if usuario.id_grupo == None:
+                            repetir = tela_grupo.entrar_grupo()
+                        else:
+                            repetir = tela_grupo.informacoes_grupo()
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
-                        repetir = tela_ajustes.ajustes()
+                        repetir = tela_ajustes.ajustes(usuario)
                         return repetir
                     elif event.ui_element == sair_botao:
                         run = False
@@ -114,13 +122,20 @@ class Menu:
                             tela_jogar = TelaJogar(self.tela, usuario)
                             repetir = tela_jogar.jogar()
                             return repetir
+                    elif event.ui_element == como_jogar_botao:
+                        tela_como_jogar = TelaComoJogar(self.tela)
+                        repetir = tela_como_jogar.como_jogar()
+                        return repetir
                     elif event.ui_element == grupo_botao:
                         tela_grupo = TelaGrupo(self.tela, usuario)
-                        repetir = tela_grupo.criar_grupo()
+                        if usuario.id_grupo == None:
+                            repetir = tela_grupo.criar_grupo()
+                        else:
+                            repetir = tela_grupo.manter_grupo()
                         return repetir
                     elif event.ui_element == ajustes_botao:
                         tela_ajustes = TelaAjustes(self.tela)
-                        repetir = tela_ajustes.ajustes()
+                        repetir = tela_ajustes.ajustes(usuario)
                         return repetir
                     elif event.ui_element == perguntas_botao:
                         if usuario.id_grupo == None:
@@ -139,22 +154,24 @@ class Menu:
             self.tela.manager.draw_ui(self.tela.WIN)
             pygame.display.flip()
         return False
+    
     def administrador(self, usuario):
         self.tela.manager.clear_and_reset()  # Reseta os elementos do pygame_gui
         BG_INICIO = pygame.image.load("imagens/bg_menu_titlescreen.png")
         pygame.display.update()
-        jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 403 * self.tela.proporcao_y), self.tela.tamanho_botao),
-                                             text='Jogar',
+        manter_professores_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 700 * self.tela.proporcao_y), (-1, self.tela.tamanho_botao[1])),
+                                             text='Manter Professores',
                                              manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
-        como_jogar_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 553 * self.tela.proporcao_y), self.tela.tamanho_botao),
-                                             text='Como Jogar',
+        manter_alunos_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 500 * self.tela.proporcao_y), (manter_professores_botao.relative_rect.size)),
+                                             text='Manter Alunos',
                                              manager=self.tela.manager,
                                              anchors={"centerx":"centerx"})
         sair_botao = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1795 * self.tela.proporcao_x, 43 * self.tela.proporcao_y), (65.94 * self.tela.proporcao_x, 64 * self.tela.proporcao_y)),
                                                     text="",
                                                     object_id=ObjectID(class_id="@botao_sair"),
                                                     manager=self.tela.manager)
+        
         clock = pygame.time.Clock()
         run = True
         while run:
@@ -162,11 +179,21 @@ class Menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-                elif event.ui_element == sair_botao:
-                    run = False
+                elif event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    if event.ui_element == sair_botao:
+                        run = False
+                    elif event.ui_element == manter_alunos_botao:
+                        tela_admin = TelaAdmin(self.tela)
+                        repetir = tela_admin.manter_alunos()
+                        return repetir
+                    elif event.ui_element == manter_professores_botao:
+                        tela_admin = TelaAdmin(self.tela)
+                        repetir = tela_admin.manter_professores()
+                        return repetir
                 self.tela.manager.process_events(event)
             self.tela.manager.update(time_delta)
             self.tela.WIN.blit(pygame.transform.scale(BG_INICIO, (self.tela.WIN.get_width(), self.tela.WIN.get_height())), (0, 0))
             self.tela.manager.draw_ui(self.tela.WIN)
             pygame.display.flip()
         return False
+    

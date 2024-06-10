@@ -1,50 +1,78 @@
 from banco_de_dados.conexao_banco_de_dados import Conexao
 
 class ProfessorDAO:
-    def __init__(self, usuario_professor, senha_professor, id_grupo):
+    def __init__(self, usuario_professor = None, senha_professor = None, id_grupo = None):
         self._usuario_professor = usuario_professor
         self._senha_professor = senha_professor
         self._id_grupo = id_grupo
 
-    @classmethod
     @Conexao.consultar
-    def ver_professores(cls):
-        obter_perguntas = "SELECT * FROM Professor"
-        cls.consulta.execute(obter_perguntas)
-        resultado = cls.consulta.fetchall()
+    def ver_todos_professores(self, consulta):
+        obter_perguntas = "SELECT usuario_professor, idGrupo FROM Professor"
+        consulta.execute(obter_perguntas)
+        resultado = consulta.fetchall()
         return resultado
 
-    @classmethod
     @Conexao.consultar
-    def adicionar_professor(cls, args):
-        professor = args[0]
+    def adicionar_professor(self, consulta):
         adicionar_professor = "INSERT INTO Professor(usuario_professor, senha_professor, idGrupo) VALUES(%s,%s,%s)"
-        valores = (professor._usuario_professor, professor._senha_professor, professor._id_grupo)
-        cls.consulta.execute(adicionar_professor, valores)
-        professor._id_professor = cls.consulta.lastrowid
+        valores = (self._usuario_professor, self._senha_professor, self._id_grupo)
+        consulta.execute(adicionar_professor, valores)
+        self._id_professor = consulta.lastrowid
         return None
     
-    @classmethod
     @Conexao.consultar
-    def vincular_grupo(cls,args):
-        professor = args[0]
-        id_grupo = professor.id_grupo
-        id_professor = professor.id
+    def vincular_grupo(self, consulta, args):
+        id_grupo = args[0]
+        id_professor = args[1]
         vincular_grupo = "UPDATE Professor SET idGrupo = %s WHERE idProfessor = %s"
         valores = (id_grupo, id_professor)
-        cls.consulta.execute(vincular_grupo, valores)
+        consulta.execute(vincular_grupo, valores)
         return None
     
-    @classmethod
     @Conexao.consultar
-    def consulta_professor(cls,args):
-        professor = args[0]
+    def consulta_professor(self, consulta):
         consultar_professor = "SELECT * FROM Professor WHERE usuario_professor = %s"
-        valores = (professor._usuario_professor,)
-        cls.consulta.execute(consultar_professor, valores)
-        resultado = cls.consulta.fetchall()
+        valores = (self._usuario_professor,)
+        consulta.execute(consultar_professor, valores)
+        resultado = consulta.fetchall()
         return resultado
     
+    @Conexao.consultar
+    def obter_id_professor(self, consulta):
+        obter_id_professor = "SELECT idProfessor FROM Professor WHERE usuario_professor = %s"
+        valores = (self._usuario_professor,)
+        consulta.execute(obter_id_professor, valores)
+        resultado = consulta.fetchone()
+        return resultado
+    
+    @Conexao.consultar
+    def remover_professor(self, consulta, args):
+        id_professor = args[0]
+        remover_professor = "DELETE FROM Professor WHERE idProfessor = %s"
+        valores = (id_professor,)
+        consulta.execute(remover_professor, valores)
+        return None
+    
+    @Conexao.consultar
+    def atualizar_pontuacao(self, consulta, args):
+        id_professor = args[0]
+        pontuacao_da_jogada = args[1]
+        atualizar_pontuacao = "UPDATE Professor SET maior_pontuacao_professor = %s WHERE idProfessor = %s"
+        valores = (pontuacao_da_jogada, id_professor)
+        consulta.execute(atualizar_pontuacao, valores)
+        resultado = consulta.fetchone()
+        return resultado
+    
+    @Conexao.consultar
+    def alterar_senha(self, consulta, args):
+        id_professor = args[0]
+        nova_senha = args[1]
+        alterar_senha = "UPDATE Professor SET senha_professor = %s WHERE idProfessor = %s"
+        valores = (nova_senha, id_professor)
+        consulta.execute(alterar_senha, valores)
+        return None
+
     @property
     def id(self):
         return self._id_professor
