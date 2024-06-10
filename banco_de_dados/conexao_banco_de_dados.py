@@ -4,11 +4,11 @@ from banco_de_dados._login_banco_de_dados import usuario, senha
 
 class Conexao:
     banco_de_dados = {
-        "host": "bio-blasters-bio-blasters.h.aivencloud.com",
+        "host": "localhost",
         "user": usuario,
         "password": senha,
         "database": "defaultdb",
-        "port": "22073",
+        "port": "3306",
     }
 
     def consultar(func):
